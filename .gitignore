@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+TODO
+*swp
+
 # production
 /build
 

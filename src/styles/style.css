@@ -5,10 +5,11 @@ body {
 
 /* Palette
  *
- * #eee
- * #32e0c4
- * #393e46
- * #222831
+ * White: #eee
+ * Accent: #32e0c4
+ * Dark: #393e46
+ * Black: #222831
+ * Grid: #9c9c9c
  */
 
 .topBar {
@@ -24,7 +25,43 @@ body {
     padding-bottom: 20px;
 }
 
-button, select {
+table, .gridBase {
+    position: relative;
+    top: 150px;
+    border-collapse: collapse !important;
+    margin: auto;
+}
+
+tr, td {
+    overflow: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0;
+}
+
+.gridButton {
+    display: inline-block;
+    border: solid;
+    border-color: #9c9c9c;
+    border-width: 1px;
+    padding: 13px 13px;
+    margin: 0;
+    text-decoration: none;
+    background: #eee;
+    color: #222831;
+    cursor: pointer;
+    text-align: center;
+    transition: background 100ms ease-in-out,
+                transform 100ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.gridButton:hover {
+    background: #222831;
+}
+
+.settingsButton, select {
     display: inline-block;
     border: none;
     padding: 1rem 2rem;
@@ -41,9 +78,9 @@ button, select {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
-button:hover,
+.settingsButton:hover,
 select:hover,
-button:active {
+.settingsButton:active {
     background: #eee;
 }
 

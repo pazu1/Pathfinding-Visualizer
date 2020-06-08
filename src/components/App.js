@@ -1,6 +1,7 @@
 import React from 'react';
 
 import SettingsBar from './SettingsBar'
+import Grid from './Grid'
 
 class App extends React.Component {
     constructor() {
@@ -11,10 +12,12 @@ class App extends React.Component {
 
     render() {
         return (
-            <SettingsBar/>
+            <div>
+                <SettingsBar/>
+                <Grid/>
+            </div>
         )
     }
 }
-
 
 export default App
