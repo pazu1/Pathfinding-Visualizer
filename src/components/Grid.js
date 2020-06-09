@@ -6,42 +6,11 @@ class Grid extends React.Component {
     constructor() {
         super()
 
-        // Make grid
-        let newGrid = []
-        for (let y=0;y<25;y++) {
-            newGrid.push([])
-            for (let x=0;x<40;x++) {
-                newGrid[y].push({
-                    wall: false,
-                    startPoint: false,
-                    endPoint: false,
-                    x: x,
-                    y: y
-                })
-            }
-        }
-
         this.state = {
-            grid: newGrid,
             drawing: false
         }
 
-        this.updateCell = this.updateCell.bind(this)
         this.handleMouse = this.handleMouse.bind(this)
-    }
-
-    updateCell(x, y) { // call this with GridButton onClicked
-        //console.log('clicked at '+x+':'+y)
-                
-        this.setState(prevState => {
-            let copyGrid  =prevState.grid
-            copyGrid[y][x].wall = true
-
-            return {
-                grid: copyGrid
-            }
-        })
-
     }
 
     handleMouse(event, pressed) {
@@ -51,7 +20,7 @@ class Grid extends React.Component {
     render() {
 
         let y = -1
-        let tableContent = this.state.grid.map(row => { 
+        let tableContent = this.props.grid.map(row => { 
             let x = -1
             y++
             let rowContent = row.map(cell => {
@@ -59,10 +28,10 @@ class Grid extends React.Component {
                 return(
                     <td key={x}>
                         <GridButton 
-                            cell={this.state.grid[y][x]}
+                            cell={this.props.grid[y][x]}
                             x={x}
                             y={y}
-                            clickFunction = {this.updateCell}
+                            clickFunction = {this.props.updateCell}
                             drawing = {this.state.drawing}
                         />
                     </td>
@@ -76,10 +45,12 @@ class Grid extends React.Component {
         })
 
         return (
-            <table className='gridBase' 
+            <table 
+                className='gridBase' 
                 onMouseDown={(e) => this.handleMouse(e, true)}
                 onMouseLeave={(e) => this.handleMouse(e, false)}
-                onMouseUp={(e) => this.handleMouse(e, false)}>
+                onMouseUp={(e) => this.handleMouse(e, false)}
+            >
                 <tbody>
                     {tableContent}
                 </tbody>

@@ -3,7 +3,9 @@ import React from 'react';
 class GridButton extends React.Component {
     render() {
         const wall = {
-            background: '#000'
+            background: '#000',
+            color: '#FFF'
+
         }
 
         return(
@@ -18,7 +20,9 @@ class GridButton extends React.Component {
                     if (this.props.drawing) 
                         this.props.clickFunction(this.props.x, this.props.y)
                 }}
-            ></button>
+            >
+                {this.props.cell.wall ? 'w' :'‎' }
+            </button> // Empty character
         )
     }
 }
