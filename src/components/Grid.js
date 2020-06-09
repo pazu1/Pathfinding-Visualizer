@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GridButton from './gridButton'
+import GridButton from './GridButton'
 
 class Grid extends React.Component {
     constructor() {
@@ -22,19 +22,33 @@ class Grid extends React.Component {
         }
 
         this.state = {
-            grid: newGrid
+            grid: newGrid,
+            drawing: false
         }
+
+        this.updateCell = this.updateCell.bind(this)
+        this.handleMouse = this.handleMouse.bind(this)
     }
 
-    componentDidMount() {
-        // Check size and decrease x and y or smth
+    updateCell(x, y) { // call this with GridButton onClicked
+        //console.log('clicked at '+x+':'+y)
+                
+        this.setState(prevState => {
+            let copyGrid  =prevState.grid
+            copyGrid[y][x].wall = true
+
+            return {
+                grid: copyGrid
+            }
+        })
+
+    }
+
+    handleMouse(event, pressed) {
+        this.setState({ drawing: pressed })
     }
 
     render() {
-
-        const wall = {
-            background: '#000'
-        }
 
         let y = -1
         let tableContent = this.state.grid.map(row => { 
@@ -45,9 +59,11 @@ class Grid extends React.Component {
                 return(
                     <td key={x}>
                         <GridButton 
-                            style={this.state.grid[y][x].wall ? wall : null}
+                            cell={this.state.grid[y][x]}
                             x={x}
                             y={y}
+                            clickFunction = {this.updateCell}
+                            drawing = {this.state.drawing}
                         />
                     </td>
                 )
@@ -60,7 +76,10 @@ class Grid extends React.Component {
         })
 
         return (
-            <table className='gridBase'>
+            <table className='gridBase' 
+                onMouseDown={(e) => this.handleMouse(e, true)}
+                onMouseLeave={(e) => this.handleMouse(e, false)}
+                onMouseUp={(e) => this.handleMouse(e, false)}>
                 <tbody>
                     {tableContent}
                 </tbody>
