@@ -3,14 +3,14 @@ import React from 'react';
 import GridButton from './GridButton'
 
 class Grid extends React.Component {
+
     constructor() {
         super()
 
         this.state = {
-            drawing: false
+            drawing: false,
+            runningAlgorithm: false
         }
-
-        this.handleMouse = this.handleMouse.bind(this)
     }
 
     handleMouse(event, pressed) {
@@ -47,7 +47,7 @@ class Grid extends React.Component {
         return (
             <table 
                 className='gridBase' 
-                onMouseDown={(e) => this.handleMouse(e, true)}
+                onMouseDown={(e) => {this.handleMouse(e, true)}}
                 onMouseLeave={(e) => this.handleMouse(e, false)}
                 onMouseUp={(e) => this.handleMouse(e, false)}
             >

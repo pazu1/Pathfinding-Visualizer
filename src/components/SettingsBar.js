@@ -22,16 +22,21 @@ class SettingsBar extends React.Component {
                     <select 
                         name='mapItems' 
                         id='mapItems'
+                        onChange={this.props.changeSelectedItem}
                     >
-                         <option value='wall'>Wall</option>
-                         <option value='startPoint'>Start Point</option>
-                         <option value='endPoint'>End Point</option>
+                         <option value={1}>Wall</option>
+                         <option value={2}>Start Point</option>
+                         <option value={3}>End Point</option>
                     </select>
                 </div>
 
                 <br/>
 
-                <button type='button' className='settingsButton'>Run!  ▷</button>
+                <button 
+                    type='button' 
+                    className='settingsButton'
+                    onClick={this.props.onClick}
+                >Run!  ▷</button>
             </div>
         )
     }
