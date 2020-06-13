@@ -31,8 +31,11 @@ class Grid extends React.Component {
                             cell={this.props.grid[y][x]}
                             x={x}
                             y={y}
-                            clickFunction = {this.props.updateCell}
-                            drawing = {this.state.drawing}
+                            clickFunction={this.props.updateCell}
+                            selectedItem={this.props.selectedItem}
+                            drawing={this.state.drawing}
+                            start={this.props.start}
+                            end={this.props.end}
                         />
                     </td>
                 )
