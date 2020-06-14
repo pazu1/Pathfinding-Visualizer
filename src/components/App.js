@@ -3,13 +3,14 @@ import React from 'react';
 import SettingsBar from './SettingsBar'
 import Grid from './Grid'
 
-const Alg = {
+export const Alg = {
     ASTAR: 1,
     DIJKSTRA: 2,
-    BFS: 3
+    BFS: 3,
+    DFS: 4
 }
 
-const CellType = {
+export const CellType = {
     NONE: 0,
     WALL: 1,
     START: 2,
@@ -18,7 +19,7 @@ const CellType = {
     ROUTE: 5
 }
 
-const WIDTH = 80
+const WIDTH = 45
 const HEIGHT = 35
 
 function sleep(ms) {
@@ -54,6 +55,7 @@ class App extends React.Component {
             algorithm: Alg.ASTAR,
             item: CellType.WALL,
             grid: newGrid,
+            visualizationRunning: false,
             start: {
                 x: null,
                 y: null
@@ -73,7 +75,10 @@ class App extends React.Component {
         this.updateEnd = this.updateEnd.bind(this)
         this.updateRoute = this.updateRoute.bind(this)
 
-        this.BFS = this.BFS.bind(this)
+        this.algFunctions = {
+            3: this.BFS.bind(this),
+            4: this.DFS.bind(this)
+        }
     }
 
     changeItem(event) {
@@ -81,12 +86,23 @@ class App extends React.Component {
     }
 
     changeAlgorithm(event) {
-        this.setState({algorithm: event.target.value})
+        this.setState({algorithm: parseInt(event.target.value)})
     }
 
     runAlgorithm() {
-        this.BFS(this.state.grid[this.state.start.y][this.state.start.x],
-            this.state.grid[this.state.end.y][this.state.end.x])
+        // Or skip animation if clicked and was already running
+        if (this.state.visualizationRunning) {
+            this.setState({visualizationRunning: false})
+        } else {
+            this.setState((prevState) => {
+                return (
+                    {visualizationRunning: !prevState.visualizationRunning}
+                )
+            },
+                () => this.algFunctions[this.state.algorithm](this.state.grid[this.state.start.y][this.state.start.x],
+                    this.state.grid[this.state.end.y][this.state.end.x])
+            )
+        }
     }
 
     updateStateGrid() {
@@ -98,9 +114,12 @@ class App extends React.Component {
             let copyGrid = prevState.grid
             console.log(copyGrid)
             this.route.map( coord => {
-                copyGrid[coord.y][coord.x].type = CellType.ROUTE
+                return copyGrid[coord.y][coord.x].type = CellType.ROUTE
             })
-            return {grid: copyGrid}
+            return {
+                grid: copyGrid,
+                visualizationRunning: false
+            }
         })
     }
 
@@ -131,6 +150,7 @@ class App extends React.Component {
         }
         this.setState({end: newEnd})
     }
+        
     updateStart(x, y) {
         let newStart = {
             x: x,
@@ -138,8 +158,13 @@ class App extends React.Component {
         }
         this.setState({start: newStart})
     }
+
+    async DFS(start, end) {
+        this.BFS(start, end, true)
+    }
         
-    async BFS(start, end) {
+    async BFS(start, end, depthFirst = false, animate = true) {
+        console.log(this.state.visualizationRunning)
         let adjacencyList = { 
             [start.x+':'+start.y]: null
         }
@@ -170,13 +195,20 @@ class App extends React.Component {
                         x: current.x, 
                         y: current.y
                     }
+                    if (depthFirst) {
+                        queue.unshift(next)
+                    } else {
                     queue.push(next)
+                    }
                 }
             })
             current.type = CellType.VISITED
-            await sleep(60);
-            this.setState({grid: prevGrid})
+            if (this.state.visualizationRunning) {
+                await sleep(60)
+                this.setState({grid: prevGrid})
+            }
         }
+        this.setState({grid: prevGrid})
         this.setRoute(adjacencyList,end) 
         this.updateRoute()
     }
@@ -204,6 +236,7 @@ class App extends React.Component {
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
                     onClick={this.runAlgorithm}
+                    visualizationRunning={this.state.visualizationRunning}
                 />
                 <Grid
                     updateCell={this.updateDrawnCell}

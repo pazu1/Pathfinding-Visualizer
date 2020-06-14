@@ -20,7 +20,7 @@ const visitedNodeStyle = {
     background: '#38ffc7',
 }
 const routeNodeStyle = {
-    background: '#ffb65c'
+    background: '#f05e54'
 }
 
 class GridButton extends React.Component {
@@ -45,14 +45,14 @@ class GridButton extends React.Component {
         let isEnd = this.props.end.x === this.props.x && this.props.end.y === this.props.y
         let text ='‎'  
 
-        if (this.props.cell.type === 4){
-            style = visitedNodeStyle 
+        if (this.props.cell.type === CellType.WALL){
+            style = wallStyle 
         }
-        else if (this.props.cell.type === 5){
+        else if (this.props.cell.type === CellType.VISITED){
+            style = visitedNodeStyle
+        }
+        else if (this.props.cell.type === CellType.ROUTE) {
             style = routeNodeStyle
-        }
-        else if (this.props.cell.type === 1) {
-            style = wallStyle
         }
         else if (isStart) {
             style = startNodeStyle

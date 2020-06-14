@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Alg, CellType } from './App.js'
+
 class SettingsBar extends React.Component {
     render() {
         return (
@@ -11,9 +13,10 @@ class SettingsBar extends React.Component {
                         id='algorithms'
                         onChange={this.props.changeSelectedAlgorithm}
                     >
-                         <option value={1}>A*</option>
-                         <option value={2}>Dijkstra</option>
-                         <option value={3}>BFS</option>
+                         <option value={Alg.ASTAR}>A*</option>
+                         <option value={Alg.DIJKSTRA}>Dijkstra</option>
+                         <option value={Alg.BFS}>BFS</option>
+                         <option value={Alg.DFS}>DFS</option>
                     </select>
                 </div>
 
@@ -24,9 +27,9 @@ class SettingsBar extends React.Component {
                         id='mapItems'
                         onChange={this.props.changeSelectedItem}
                     >
-                         <option value={1}>Wall</option>
-                         <option value={2}>Start Point</option>
-                         <option value={3}>End Point</option>
+                         <option value={CellType.WALL}>Wall</option>
+                         <option value={CellType.START}>Start Point</option>
+                         <option value={CellType.END}>End Point</option>
                     </select>
                 </div>
 
@@ -36,7 +39,10 @@ class SettingsBar extends React.Component {
                     type='button' 
                     className='settingsButton'
                     onClick={this.props.onClick}
-                >Run!  ▷</button>
+                >
+                    {!this.props.visualizationRunning ? 'Run! ▷'
+                    : 'Skip animation ▷▷'} 
+                </button>
             </div>
         )
     }
