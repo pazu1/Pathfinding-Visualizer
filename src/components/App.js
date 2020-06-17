@@ -27,6 +27,7 @@ function sleep(ms) {
 }
 
 class App extends React.Component {
+
     constructor() {
         super()
 
@@ -56,6 +57,7 @@ class App extends React.Component {
             item: CellType.WALL,
             grid: newGrid,
             visualizationRunning: false,
+            visualizationDone: false,
             start: {
                 x: null,
                 y: null
@@ -69,13 +71,16 @@ class App extends React.Component {
         this.updateDrawnCell = this.updateDrawnCell.bind(this)
         this.changeAlgorithm = this.changeAlgorithm.bind(this)
         this.changeItem = this.changeItem.bind(this)
-        this.runAlgorithm = this.runAlgorithm.bind(this)
+        this.onRunButtonClick = this.onRunButtonClick.bind(this)
         this.updateStateGrid = this.updateStateGrid.bind(this)
         this.updateStart = this.updateStart.bind(this)
         this.updateEnd = this.updateEnd.bind(this)
         this.updateRoute = this.updateRoute.bind(this)
+        this.clearVisualization = this.clearVisualization.bind(this)
 
         this.algFunctions = {
+            1: this.BFS.bind(this),
+            2: this.BFS.bind(this),
             3: this.BFS.bind(this),
             4: this.DFS.bind(this)
         }
@@ -89,14 +94,15 @@ class App extends React.Component {
         this.setState({algorithm: parseInt(event.target.value)})
     }
 
-    runAlgorithm() {
-        // Or skip animation if clicked and was already running
+    onRunButtonClick() { // Or skip animation if clicked and was already running
         if (this.state.visualizationRunning) {
-            this.setState({visualizationRunning: false})
+            this.setState({visualizationRunning: false, visualizationDone: true})
+        } else if (this.state.visualizationDone) {
+            this.clearVisualization()
         } else {
             this.setState((prevState) => {
                 return (
-                    {visualizationRunning: !prevState.visualizationRunning}
+                    {visualizationRunning: true}
                 )
             },
                 () => this.algFunctions[this.state.algorithm](this.state.grid[this.state.start.y][this.state.start.x],
@@ -112,7 +118,6 @@ class App extends React.Component {
     updateRoute() {
         this.setState((prevState) => {
             let copyGrid = prevState.grid
-            console.log(copyGrid)
             this.route.map( coord => {
                 return copyGrid[coord.y][coord.x].type = CellType.ROUTE
             })
@@ -120,10 +125,10 @@ class App extends React.Component {
                 grid: copyGrid,
                 visualizationRunning: false
             }
-        })
+        }, () => {this.setState({visualizationDone: true})})
     }
 
-    updateDrawnCell(x, y){
+    updateDrawnCell(x, y) {
         if (this.state.item ===  CellType.START) { 
             if (this.state.start.x !== null && this.state.start.y !== null) {
                 let prevX = this.state.start.x
@@ -163,8 +168,7 @@ class App extends React.Component {
         this.BFS(start, end, true)
     }
         
-    async BFS(start, end, depthFirst = false, animate = true) {
-        console.log(this.state.visualizationRunning)
+    async BFS(start, end, depthFirst = false) {
         let adjacencyList = { 
             [start.x+':'+start.y]: null
         }
@@ -213,6 +217,42 @@ class App extends React.Component {
         this.updateRoute()
     }
 
+    clearVisualization() {
+        this.route = []
+        this.setState((prevState) => {
+            let clearedGrid = prevState.grid.map((row) => {
+                row = row.map((c) => {
+                    if (c.type === CellType.ROUTE ||
+                        c.type === CellType.VISITED ||
+                        c.type === CellType.END ||
+                        c.type === CellType.START) {
+                    c.type = CellType.NONE
+                    }
+                    c.visited = false
+                    c.end = false
+                    c.start = false
+                    return c
+                })
+                return row
+            })
+            console.log(clearedGrid)
+
+            return {
+                grid: clearedGrid,
+                start: {
+                    x: null,
+                    y: null
+                },
+                end: {
+                    x: null,
+                    y: null
+                },
+                visualizationDone: false,
+                visualizationRunning: false
+            }
+        })
+    }
+
     setRoute(adjacencyList, end) {
         this.route.push({
             x: end.x, 
@@ -225,8 +265,6 @@ class App extends React.Component {
             index = adjacencyList[index].x+':'+adjacencyList[index].y
         }
             
-        console.log(this.route)
-        console.log(adjacencyList[index])
     }
 
     render() {
@@ -235,8 +273,9 @@ class App extends React.Component {
                 <SettingsBar
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
-                    onClick={this.runAlgorithm}
+                    onClick={this.onRunButtonClick}
                     visualizationRunning={this.state.visualizationRunning}
+                    visualizationDone={this.state.visualizationDone}
                 />
                 <Grid
                     updateCell={this.updateDrawnCell}

@@ -35,12 +35,14 @@ table, .gridBase {
 
 tr, td {
     overflow: auto;
-    white-space: nowrap;
+    white-space: pre;
     overflow: hidden;
     padding: 0;
+    height: 20px;
 }
 
 .gridButton {
+    outline: none;
     display: inline-block;
     border: solid;
     border-color: #9c9c9c;
@@ -86,6 +88,7 @@ tr, td {
 
 option {
     background: #eee;
+    outline: none;
 }
 
 .settingsButton:hover,

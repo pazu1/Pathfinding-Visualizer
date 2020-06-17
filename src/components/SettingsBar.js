@@ -2,8 +2,24 @@ import React from 'react';
 
 import { Alg, CellType } from './App.js'
 
-class SettingsBar extends React.Component {
+class SettingsBar extends React.Component { // TODO: add reset button and disable settings when algorithm is running
+
     render() {
+
+        let runButtonStyle = {
+            background: '#32e0c4'
+        }
+
+        let runButtonText = 'Run! '
+
+        if (this.props.visualizationRunning) { 
+            runButtonStyle.background = '#eee'
+            runButtonText = 'Skip visualization'
+        } else if (this.props.visualizationDone) {
+            runButtonStyle.background = '#eee'
+            runButtonText = 'Clear visualization'
+        }
+
         return (
             <div className='topBar'>
                 <div>
@@ -36,12 +52,12 @@ class SettingsBar extends React.Component {
                 <br/>
 
                 <button 
+                    style={runButtonStyle}
                     type='button' 
                     className='settingsButton'
                     onClick={this.props.onClick}
                 >
-                    {!this.props.visualizationRunning ? 'Run! ▷'
-                    : 'Skip animation ▷▷'} 
+                    {runButtonText}
                 </button>
             </div>
         )
