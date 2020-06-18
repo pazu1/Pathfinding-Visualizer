@@ -1,4 +1,5 @@
 import React from 'react';
+import PriorityQueue from 'priorityqueue'
 
 import SettingsBar from './SettingsBar'
 import Grid from './Grid'
@@ -79,7 +80,7 @@ class App extends React.Component {
         this.clearVisualization = this.clearVisualization.bind(this)
 
         this.algFunctions = {
-            1: this.BFS.bind(this),
+            1: this.aStar.bind(this),
             2: this.BFS.bind(this),
             3: this.BFS.bind(this),
             4: this.DFS.bind(this)
@@ -96,15 +97,14 @@ class App extends React.Component {
 
     onRunButtonClick() { // Or skip animation if clicked and was already running
         if (this.state.visualizationRunning) {
-            this.setState({visualizationRunning: false, visualizationDone: true})
+            this.setState({
+                visualizationRunning: false, 
+                visualizationDone: true
+            })
         } else if (this.state.visualizationDone) {
             this.clearVisualization()
         } else {
-            this.setState((prevState) => {
-                return (
-                    {visualizationRunning: true}
-                )
-            },
+            this.setState({visualizationRunning: true},
                 () => this.algFunctions[this.state.algorithm](this.state.grid[this.state.start.y][this.state.start.x],
                     this.state.grid[this.state.end.y][this.state.end.x])
             )
@@ -164,11 +164,72 @@ class App extends React.Component {
         this.setState({start: newStart})
     }
 
+    async aStar(start, end) {
+        class Node {
+          constructor(x, y, dist, gScore) {
+            this.x = x
+            this.y = y
+            this.dist = dist
+            this.gScore = gScore
+          }
+        }
+
+        const comparator = (a, b) => {
+            return (a.gScore > b.gScore)
+        }
+        const pq = new PriorityQueue({ comparator })
+        pq.push(new Node(start.x, start.y, 0, 0))
+
+        let adjacencyList = { 
+            [start.x+':'+start.y]: null
+        }
+
+        let prevGrid = this.state.grid
+
+        const adjacent = [
+            [-1,0],
+            [1,0],
+            [0,1],
+            [0,-1]
+        ]
+        
+        while (pq.top().x !== end.x && pq.top().y !== end.y) {
+            let current = pq.pop()
+            adjacent.forEach((direction) => {
+                let x = current.x+direction[0]
+                let y = current.y+direction[1]
+                let nextY = prevGrid[y]
+                let next = null
+                if (nextY !== undefined)
+                    next = nextY[x] 
+                if (next && !next.visited && next.type !== CellType.WALL) {
+                    adjacencyList[next.x+':'+next.y] = {
+                        x: current.x, 
+                        y: current.y
+                    }
+                    let distance = current.distance+1 
+                    let a = current.x - x
+                    let b = current.y - y
+                    let gScore = distance + Math.sqrt(a*a + b*b)
+                    pq.push(new Node(x, y, distance,gScore))
+                }
+            })
+            console.log(pq)
+            prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
+            if (this.state.visualizationRunning) {
+                await sleep(60)
+                this.setState({grid: prevGrid})
+            }
+        }
+
+    }
+
     async DFS(start, end) {
         this.BFS(start, end, true)
     }
         
     async BFS(start, end, depthFirst = false) {
+
         let adjacencyList = { 
             [start.x+':'+start.y]: null
         }
@@ -186,7 +247,7 @@ class App extends React.Component {
 
         while (queue.length && current !== end) {
             current = queue.shift()
-            adjacent.forEach((direction, index) => {
+            adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
                 let nextY = prevGrid[y]
@@ -276,6 +337,7 @@ class App extends React.Component {
                     onClick={this.onRunButtonClick}
                     visualizationRunning={this.state.visualizationRunning}
                     visualizationDone={this.state.visualizationDone}
+                    settingsDisabled={this.state.visualizationRunning || this.state.visualizationDone}
                 />
                 <Grid
                     updateCell={this.updateDrawnCell}
