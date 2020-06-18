@@ -32,7 +32,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "priorityqueue": "^1.0.0"
-  }
+  "devDependencies": {}
 }
