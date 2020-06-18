@@ -1,5 +1,4 @@
 import React from 'react';
-import PriorityQueue from 'priorityqueue'
 
 import SettingsBar from './SettingsBar'
 import Grid from './Grid'
@@ -169,16 +168,16 @@ class App extends React.Component {
           constructor(x, y, dist, gScore) {
             this.x = x
             this.y = y
-            this.dist = dist
+            this.distance = dist
             this.gScore = gScore
           }
         }
-
-        const comparator = (a, b) => {
-            return (a.gScore > b.gScore)
+        
+        let pq = [] // Sort this with sort and custom comparator
+        const comparator = (a,b) => {
+            return a.gScore > b.gScore ? 1 : -1
         }
-        const pq = new PriorityQueue({ comparator })
-        pq.push(new Node(start.x, start.y, 0, 0))
+        pq.push(new Node(start.x,start.y,0,0))
 
         let adjacencyList = { 
             [start.x+':'+start.y]: null
@@ -192,9 +191,10 @@ class App extends React.Component {
             [0,1],
             [0,-1]
         ]
+        console.log(pq)
         
-        while (pq.top().x !== end.x && pq.top().y !== end.y) {
-            let current = pq.pop()
+        let current = pq.shift()
+        while (!(current.x === end.x && current.y === end.y)) {
             adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
@@ -208,14 +208,17 @@ class App extends React.Component {
                         y: current.y
                     }
                     let distance = current.distance+1 
-                    let a = current.x - x
-                    let b = current.y - y
-                    let gScore = distance + Math.sqrt(a*a + b*b)
+                    let a = x - end.x
+                    let b = y - end.y
+                    let gScore = Math.hypot(end.x-x, end.y-y)
                     pq.push(new Node(x, y, distance,gScore))
+                    next.visited = true
                 }
             })
-            console.log(pq)
             prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
+            pq.sort(comparator)
+            console.log(pq)
+            current = pq.shift()
             if (this.state.visualizationRunning) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
@@ -296,7 +299,6 @@ class App extends React.Component {
                 })
                 return row
             })
-            console.log(clearedGrid)
 
             return {
                 grid: clearedGrid,
