@@ -173,11 +173,11 @@ class App extends React.Component {
           }
         }
         
-        let pq = [] // Sort this with sort and custom comparator
+        let queue = [] // Sorted each iteration, works as priority queue
         const comparator = (a,b) => {
-            return a.gScore > b.gScore ? 1 : -1
+            return a.gScore > b.gScore ? 1 : -1 
         }
-        pq.push(new Node(start.x,start.y,0,0))
+        queue.push(new Node(start.x,start.y,0,0))
 
         let adjacencyList = { 
             [start.x+':'+start.y]: null
@@ -191,9 +191,9 @@ class App extends React.Component {
             [0,1],
             [0,-1]
         ]
-        console.log(pq)
+        console.log(queue)
         
-        let current = pq.shift()
+        let current = queue.shift()
         while (!(current.x === end.x && current.y === end.y)) {
             adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
@@ -207,24 +207,22 @@ class App extends React.Component {
                         x: current.x, 
                         y: current.y
                     }
-                    let distance = current.distance+1 
-                    let a = x - end.x
-                    let b = y - end.y
-                    let gScore = Math.hypot(end.x-x, end.y-y)
-                    pq.push(new Node(x, y, distance,gScore))
-                    next.visited = true
+                    let distance = current.distance+1  
+                    let gScore = Math.abs(end.x - x) + Math.abs(end.y - y) // OLD: Math.hypot(end.x-x, end.y-y) 
+                                                                           // TODO: take into account distance travelled
+                    queue.push(new Node(x, y, distance,gScore))
+                    next.visited = true // TODO: don't do this, instead check if exists in adjacencyList
                 }
             })
             prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
-            pq.sort(comparator)
-            console.log(pq)
-            current = pq.shift()
+            queue.sort(comparator)
+            console.log(queue)
+            current = queue.shift()
             if (this.state.visualizationRunning) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
             }
         }
-
     }
 
     async DFS(start, end) {
