@@ -172,18 +172,6 @@ class App extends React.Component {
             this.gScore = gScore
           }
         }
-        
-        let queue = [] // Sorted each iteration, works as priority queue
-        const comparator = (a,b) => {
-            return a.gScore > b.gScore ? 1 : -1 
-        }
-        queue.push(new Node(start.x,start.y,0,0))
-
-        let adjacencyList = { 
-            [start.x+':'+start.y]: null
-        }
-
-        let prevGrid = this.state.grid
 
         const adjacent = [
             [-1,0],
@@ -191,9 +179,22 @@ class App extends React.Component {
             [0,1],
             [0,-1]
         ]
-        console.log(queue)
-        
+
+        let queue = [] // Sorted each iteration, works as priority queue
+        queue.push(new Node(start.x,start.y,0,0))
         let current = queue.shift()
+
+        const comparator = (a,b) => { // TODO: make this prefer straight lines 
+            return a.gScore >= b.gScore ? 1 : -1
+        }
+
+        let adjacencyList = { 
+            [start.x+':'+start.y]: null
+        }
+
+        let prevGrid = this.state.grid
+
+        start.visited = true
         while (!(current.x === end.x && current.y === end.y)) {
             adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
@@ -208,21 +209,26 @@ class App extends React.Component {
                         y: current.y
                     }
                     let distance = current.distance+1  
-                    let gScore = Math.abs(end.x - x) + Math.abs(end.y - y) // OLD: Math.hypot(end.x-x, end.y-y) 
-                                                                           // TODO: take into account distance travelled
+                    let gScore = distance + 1.5*(Math.abs(end.x - x) + Math.abs(end.y - y)) 
                     queue.push(new Node(x, y, distance,gScore))
                     next.visited = true // TODO: don't do this, instead check if exists in adjacencyList
+                    adjacencyList[x+':'+y] = {
+                        x: current.x, 
+                        y: current.y
+                    }
                 }
             })
-            prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
+            prevGrid[current.y][current.x].type = CellType.VISITED // Visually mark current as visited
             queue.sort(comparator)
-            console.log(queue)
             current = queue.shift()
             if (this.state.visualizationRunning) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
             }
         }
+        this.setState({grid: prevGrid})
+        this.setRoute(adjacencyList,end) 
+        this.updateRoute()
     }
 
     async DFS(start, end) {
@@ -247,7 +253,6 @@ class App extends React.Component {
         ]
 
         while (queue.length && current !== end) {
-            current = queue.shift()
             adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
@@ -269,6 +274,7 @@ class App extends React.Component {
                 }
             })
             current.type = CellType.VISITED
+            current = queue.shift()
             if (this.state.visualizationRunning) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
@@ -304,10 +310,6 @@ class App extends React.Component {
                     x: null,
                     y: null
                 },
-                end: {
-                    x: null,
-                    y: null
-                },
                 visualizationDone: false,
                 visualizationRunning: false
             }
@@ -325,6 +327,9 @@ class App extends React.Component {
             this.route.push(adjacencyList[index])
             index = adjacencyList[index].x+':'+adjacencyList[index].y
         }
+        console.log('Route length: '+this.route.length)
+        this.route.shift() // remove start
+        this.route.pop() // and end
             
     }
 
