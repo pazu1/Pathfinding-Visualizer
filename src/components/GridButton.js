@@ -1,90 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { CellType } from './App'
-
-const defaultStyle = {
-    background: '#FFF',
-    color: '#000'
-}
-const wallStyle = {
-    background: '#000',
-    color: '#000'
-}
-const startNodeStyle = {
-    background: '#d2ff4a'
-}
-const endNodeStyle = {
-    background: '#fcba03'
-}
-const visitedNodeStyle = {
-    background: '#38ffc7',
-}
-const routeNodeStyle = {
-    background: '#f05e54'
-}
-
-class GridButton extends React.Component {
-
-    constructor() {
-        super()
-
-        this.state = {
-            styleType: defaultStyle
-        }
-        this.toggleWall = this.toggleWall.bind(this)
+const CellStyles = [
+    {
+        background: '#FFF',
+        color: '#000'
+    },
+    {
+        background: '#000',
+        color: '#000'
+    },
+    {
+        background: '#d2ff4a',
+    },
+    {
+        background: '#fcba03'
+    },
+    {
+        background: '#38ffc7',
+    },
+    {
+        background: '#f05e54'
     }
+]
 
-    toggleWall(type) { 
-        this.setState({styleType: wallStyle})
+function GridButton (props) {
+
+    const [, setState] = useState()
+    const updateAnyway = () => {
+        setState({})
     }
-
-    render() {
         
-        let style = defaultStyle 
-        let isStart = this.props.start.x === this.props.x && this.props.start.y === this.props.y
-        let isEnd = this.props.end.x === this.props.x && this.props.end.y === this.props.y
-        let text ='‎'  
+    let style = CellStyles[0]
+    let text ='‎'  
+    let isStart = props.start.x === props.x && props.start.y === props.y
+    let isEnd = props.end.x === props.x && props.end.y === props.y
 
-        if (this.props.cell.type === CellType.WALL){
-            style = wallStyle 
-        }
-        else if (this.props.cell.type === CellType.VISITED){
-            style = visitedNodeStyle
-        }
-        else if (this.props.cell.type === CellType.ROUTE) {
-            style = routeNodeStyle
-        }
-        else if (isStart) {
-            style = startNodeStyle
-            text = 'S'
-        } else if (isEnd) {
-            style = endNodeStyle
-            text = 'E'
-        }
-
-        return(
-            <button 
-                type='button' 
-                className='gridButton'
-                style={style}
-
-                onMouseDown = {() => {
-                    this.props.clickFunction(this.props.x, this.props.y)
-                    this.toggleWall(this.props.selectedItem)
-                }}
-                onMouseOver = {() => {
-                    if (this.props.drawing) {
-                        this.props.clickFunction(this.props.x, this.props.y)
-                        this.toggleWall(this.props.selectedItem)
-                    }
-                }}
-            >
-                {//this.props.cell.type === 4 ? 'v' :'‎' }
-                }
-                {text}
-            </button>
-        )
+    if (!isStart && !isEnd){
+        style = CellStyles[props.cell.type]
+    } else if (isStart) {
+        style = CellStyles[2]
+        text = 'S'
+    } else if (isEnd) {
+        style = CellStyles[3]
+        text = 'E'
     }
+
+    return(
+        <button 
+            type='button' 
+            className='gridButton'
+            style={style}
+
+            onMouseDown = {() => {
+                props.clickFunction(props.x, props.y)
+                updateAnyway()
+                
+            }}
+            onMouseOver = {() => {
+                if (props.drawing) {
+                    props.clickFunction(props.x, props.y)
+                    updateAnyway()
+                }
+            }}
+        >
+            {text}
+        </button>
+    )
 }
 
 export default GridButton

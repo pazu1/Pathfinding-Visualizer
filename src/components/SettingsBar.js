@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alg, CellType } from './App.js'
+import { Alg, CellType, VizState } from './App.js'
 
 class SettingsBar extends React.Component { // TODO: add reset button and disable settings when algorithm is running
 
@@ -12,10 +12,11 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
 
         let runButtonText = 'Run! '
 
-        if (this.props.visualizationRunning) { 
+        if (this.props.visualizationState === VizState.RUNNING) { 
+            console.log(this.props.visualizationState)
             runButtonStyle.background = '#eee'
             runButtonText = 'Skip visualization'
-        } else if (this.props.visualizationDone) {
+        } else if (this.props.visualizationState === VizState.FINISHED) {
             runButtonStyle.background = '#eee'
             runButtonText = 'Clear visualization'
         }

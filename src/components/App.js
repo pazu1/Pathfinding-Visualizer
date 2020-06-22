@@ -19,6 +19,20 @@ export const CellType = {
     ROUTE: 5
 }
 
+const Adjacent = [
+    [-1,0],
+    [1,0],
+    [0,1],
+    [0,-1]
+]
+
+export const VizState = {
+    INACTIVE: 0,
+    RUNNING: 1,
+    FINISHED: 2
+}
+
+
 const WIDTH = 45
 const HEIGHT = 35
 
@@ -41,7 +55,7 @@ class App extends React.Component {
                     weight: 0, // TODO
                     startPoint: false,
                     endPoint: false,
-                    visited: false,
+                    inList: false,
                     x: x,
                     y: y
                 })
@@ -56,8 +70,7 @@ class App extends React.Component {
             algorithm: Alg.ASTAR,
             item: CellType.WALL,
             grid: newGrid,
-            visualizationRunning: false,
-            visualizationDone: false,
+            visualizationState: VizState.INACTIVE,
             start: {
                 x: null,
                 y: null
@@ -95,15 +108,14 @@ class App extends React.Component {
     }
 
     onRunButtonClick() { // Or skip animation if clicked and was already running
-        if (this.state.visualizationRunning) {
+        if (this.state.visualizationState === VizState.RUNNING) {
             this.setState({
-                visualizationRunning: false, 
-                visualizationDone: true
+                visualizationState: VizState.FINISHED
             })
-        } else if (this.state.visualizationDone) {
+        } else if (this.state.visualizationState === VizState.FINISHED) {
             this.clearVisualization()
         } else {
-            this.setState({visualizationRunning: true},
+            this.setState({visualizationState: VizState.RUNNING},
                 () => this.algFunctions[this.state.algorithm](this.state.grid[this.state.start.y][this.state.start.x],
                     this.state.grid[this.state.end.y][this.state.end.x])
             )
@@ -122,9 +134,9 @@ class App extends React.Component {
             })
             return {
                 grid: copyGrid,
-                visualizationRunning: false
+                visualizationState: VizState.RUNNING
             }
-        }, () => {this.setState({visualizationDone: true})})
+        }, () => {this.setState({visualizationState: VizState.FINISHED})})
     }
 
     updateDrawnCell(x, y) {
@@ -173,13 +185,6 @@ class App extends React.Component {
           }
         }
 
-        const adjacent = [
-            [-1,0],
-            [1,0],
-            [0,1],
-            [0,-1]
-        ]
-
         let queue = [] // Sorted each iteration, works as priority queue
         queue.push(new Node(start.x,start.y,0,0))
         let current = queue.shift()
@@ -194,24 +199,25 @@ class App extends React.Component {
 
         let prevGrid = this.state.grid
 
-        start.visited = true
+        start.inList = true
         while (!(current.x === end.x && current.y === end.y)) {
-            adjacent.forEach((direction) => {
+            Adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
                 let nextY = prevGrid[y]
                 let next = null
                 if (nextY !== undefined)
                     next = nextY[x] 
-                if (next && !next.visited && next.type !== CellType.WALL) {
+                if (next && !next.inList && next.type !== CellType.WALL) {
                     adjacencyList[next.x+':'+next.y] = {
                         x: current.x, 
                         y: current.y
                     }
                     let distance = current.distance+1  
-                    let gScore = distance + 1.5*(Math.abs(end.x - x) + Math.abs(end.y - y)) 
+                    const multiplier = 1
+                    let gScore = distance + multiplier*(Math.abs(end.x - x) + Math.abs(end.y - y)) // If gScore > actual => not guaranteed to find shortest path
                     queue.push(new Node(x, y, distance,gScore))
-                    next.visited = true // TODO: don't do this, instead check if exists in adjacencyList
+                    next.inList = true
                     adjacencyList[x+':'+y] = {
                         x: current.x, 
                         y: current.y
@@ -221,7 +227,7 @@ class App extends React.Component {
             prevGrid[current.y][current.x].type = CellType.VISITED // Visually mark current as visited
             queue.sort(comparator)
             current = queue.shift()
-            if (this.state.visualizationRunning) {
+            if (this.state.visualizationState === VizState.RUNNING) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
             }
@@ -242,26 +248,20 @@ class App extends React.Component {
         }
         let queue = [] 
         let current = start
-        start.visited = true
+        start.inList = true
         let prevGrid = this.state.grid
         queue.push(current)
-        const adjacent = [
-            [-1,0],
-            [1,0],
-            [0,1],
-            [0,-1]
-        ]
 
         while (queue.length && current !== end) {
-            adjacent.forEach((direction) => {
+            Adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
                 let nextY = prevGrid[y]
                 let next = null
                 if (nextY !== undefined)
                     next = nextY[x] 
-                if (next && !next.visited && next.type !== CellType.WALL) {
-                    next.visited = true    
+                if (next && !next.inList && next.type !== CellType.WALL) {
+                    next.inList = true    
                     adjacencyList[x+':'+y] = {
                         x: current.x, 
                         y: current.y
@@ -275,7 +275,7 @@ class App extends React.Component {
             })
             current.type = CellType.VISITED
             current = queue.shift()
-            if (this.state.visualizationRunning) {
+            if (this.state.visualizationState === VizState.RUNNING) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
             }
@@ -296,7 +296,7 @@ class App extends React.Component {
                         c.type === CellType.START) {
                     c.type = CellType.NONE
                     }
-                    c.visited = false
+                    c.inList = false
                     c.end = false
                     c.start = false
                     return c
@@ -306,12 +306,7 @@ class App extends React.Component {
 
             return {
                 grid: clearedGrid,
-                start: {
-                    x: null,
-                    y: null
-                },
-                visualizationDone: false,
-                visualizationRunning: false
+                visualizationState: VizState.INACTIVE
             }
         })
     }
@@ -340,9 +335,7 @@ class App extends React.Component {
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
                     onClick={this.onRunButtonClick}
-                    visualizationRunning={this.state.visualizationRunning}
-                    visualizationDone={this.state.visualizationDone}
-                    settingsDisabled={this.state.visualizationRunning || this.state.visualizationDone}
+                    visualizationState={this.state.visualizationState}
                 />
                 <Grid
                     updateCell={this.updateDrawnCell}
