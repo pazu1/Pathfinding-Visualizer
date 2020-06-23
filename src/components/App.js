@@ -21,8 +21,8 @@ export const CellType = {
 
 const Adjacent = [
     [-1,0],
-    [1,0],
     [0,1],
+    [1,0],
     [0,-1]
 ]
 
@@ -31,7 +31,6 @@ export const VizState = {
     RUNNING: 1,
     FINISHED: 2
 }
-
 
 const WIDTH = 45
 const HEIGHT = 35
@@ -175,7 +174,9 @@ class App extends React.Component {
         this.setState({start: newStart})
     }
 
-    async aStar(start, end) {
+    async aStar(start, end) { 
+
+        // initialize
         class Node {
           constructor(x, y, dist, gScore) {
             this.x = x
@@ -184,56 +185,71 @@ class App extends React.Component {
             this.gScore = gScore
           }
         }
-
-        let queue = [] // Sorted each iteration, works as priority queue
-        queue.push(new Node(start.x,start.y,0,0))
-        let current = queue.shift()
-
-        const comparator = (a,b) => { // TODO: make this prefer straight lines 
+        const comparator = (a,b) => { 
             return a.gScore >= b.gScore ? 1 : -1
         }
 
-        let adjacencyList = { 
+        let queue = [] // Sorted each iteration, works as priority queue
+        queue.push(new Node(start.x,start.y,0,0))
+        let adjacencyListD = { 
             [start.x+':'+start.y]: null
         }
-
         let prevGrid = this.state.grid
-
         start.inList = true
-        while (!(current.x === end.x && current.y === end.y)) {
+
+        // perform search
+        while (queue.length) {
+            let current = queue.shift()
+
+            if (current.x === end.x && current.y === end.y) { // found
+                break
+            }
+
             Adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
                 let nextY = prevGrid[y]
-                let next = null
-                if (nextY !== undefined)
-                    next = nextY[x] 
-                if (next && !next.inList && next.type !== CellType.WALL) {
-                    adjacencyList[next.x+':'+next.y] = {
-                        x: current.x, 
-                        y: current.y
+                if (nextY !== undefined) {
+                    let next = nextY[x]
+                    if (next) {
+                        if (next.type === CellType.WALL ||
+                           (next.x === start.x && next.y === start.y)) return
                     }
-                    let distance = current.distance+1  
-                    const multiplier = 1
-                    let gScore = distance + multiplier*(Math.abs(end.x - x) + Math.abs(end.y - y)) // If gScore > actual => not guaranteed to find shortest path
-                    queue.push(new Node(x, y, distance,gScore))
-                    next.inList = true
-                    adjacencyList[x+':'+y] = {
+                    else return
+                } else return
+
+                if (!adjacencyListD[x+':'+y]) { // Not yet discovered
+                    adjacencyListD[x+':'+y] = {
                         x: current.x, 
-                        y: current.y
+                        y: current.y,
+                        d: 9999
                     }
                 }
+
+                let distance = current.distance+1  
+                const multiplier = 1
+                let gScore = distance + multiplier*(Math.abs(end.x - x) + Math.abs(end.y - y))
+
+                if (distance < adjacencyListD[x+':'+y].d) { // Found a shorter path
+                    adjacencyListD[x+':'+y] = {
+                        x: current.x, 
+                        y: current.y,
+                        d: distance
+                    }
+                    queue.push(new Node(x, y, distance,gScore))
+                }
             })
-            prevGrid[current.y][current.x].type = CellType.VISITED // Visually mark current as visited
+            prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
             queue.sort(comparator)
-            current = queue.shift()
             if (this.state.visualizationState === VizState.RUNNING) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
             }
         }
+
+        // draw results
         this.setState({grid: prevGrid})
-        this.setRoute(adjacencyList,end) 
+        this.setRoute(adjacencyListD,end) 
         this.updateRoute()
     }
 
@@ -256,11 +272,11 @@ class App extends React.Component {
             Adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
-                let nextY = prevGrid[y]
-                let next = null
-                if (nextY !== undefined)
-                    next = nextY[x] 
-                if (next && !next.inList && next.type !== CellType.WALL) {
+                if (prevGrid[y] === undefined)
+                    return
+                let next = prevGrid[y][x]
+
+                if (next && !adjacencyList.hasOwnProperty([x+':'+y]) && next.type !== CellType.WALL) {
                     next.inList = true    
                     adjacencyList[x+':'+y] = {
                         x: current.x, 
