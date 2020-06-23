@@ -54,7 +54,6 @@ class App extends React.Component {
                     weight: 0, // TODO
                     startPoint: false,
                     endPoint: false,
-                    inList: false,
                     x: x,
                     y: y
                 })
@@ -91,7 +90,7 @@ class App extends React.Component {
         this.clearVisualization = this.clearVisualization.bind(this)
 
         this.algFunctions = {
-            1: this.aStar.bind(this),
+            1: this.aStarPlus.bind(this),
             2: this.BFS.bind(this),
             3: this.BFS.bind(this),
             4: this.DFS.bind(this)
@@ -107,6 +106,7 @@ class App extends React.Component {
     }
 
     onRunButtonClick() { // Or skip animation if clicked and was already running
+        console.log(this.state.end)
         if (this.state.visualizationState === VizState.RUNNING) {
             this.setState({
                 visualizationState: VizState.FINISHED
@@ -174,7 +174,7 @@ class App extends React.Component {
         this.setState({start: newStart})
     }
 
-    async aStar(start, end) { 
+    async aStarPlus(start, end, alg = Alg.ASTAR) { 
 
         // initialize
         class Node {
@@ -195,7 +195,6 @@ class App extends React.Component {
             [start.x+':'+start.y]: null
         }
         let prevGrid = this.state.grid
-        start.inList = true
 
         // perform search
         while (queue.length) {
@@ -232,11 +231,18 @@ class App extends React.Component {
                         y: current.y,
                         d: distance
                     }
-                    queue.push(new Node(x, y, distance,gScore))
+                    if (alg !== Alg.DFS) {
+                        queue.push(new Node(x, y, distance,gScore))
+                    }
+                    else {
+                        queue.unshift(new Node(x, y, distance,gScore))
+                    }
                 }
             })
             prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
-            queue.sort(comparator)
+            if (alg === Alg.ASTAR ) {
+                queue.sort(comparator)
+            }
             if (this.state.visualizationState === VizState.RUNNING) {
                 await sleep(60)
                 this.setState({grid: prevGrid})
@@ -250,51 +256,12 @@ class App extends React.Component {
     }
 
     async DFS(start, end) {
-        this.BFS(start, end, true)
+        this.aStarPlus(start, end, Alg.DFS)
     }
         
-    async BFS(start, end, depthFirst = false) {
+    async BFS(start, end) {
+        this.aStarPlus(start, end, Alg.BFS)
 
-        let adjacencyList = { 
-            [start.x+':'+start.y]: null
-        }
-        let queue = [] 
-        let current = start
-        start.inList = true
-        let prevGrid = this.state.grid
-        queue.push(current)
-
-        while (queue.length && current !== end) {
-            Adjacent.forEach((direction) => {
-                let x = current.x+direction[0]
-                let y = current.y+direction[1]
-                if (prevGrid[y] === undefined)
-                    return
-                let next = prevGrid[y][x]
-
-                if (next && !adjacencyList.hasOwnProperty([x+':'+y]) && next.type !== CellType.WALL) {
-                    next.inList = true    
-                    adjacencyList[x+':'+y] = {
-                        x: current.x, 
-                        y: current.y
-                    }
-                    if (depthFirst) {
-                        queue.unshift(next)
-                    } else {
-                    queue.push(next)
-                    }
-                }
-            })
-            current.type = CellType.VISITED
-            current = queue.shift()
-            if (this.state.visualizationState === VizState.RUNNING) {
-                await sleep(60)
-                this.setState({grid: prevGrid})
-            }
-        }
-        this.setState({grid: prevGrid})
-        this.setRoute(adjacencyList,end) 
-        this.updateRoute()
     }
 
     clearVisualization() {
@@ -302,15 +269,11 @@ class App extends React.Component {
         this.setState((prevState) => {
             let clearedGrid = prevState.grid.map((row) => {
                 row = row.map((c) => {
-                    if (c.type === CellType.ROUTE ||
-                        c.type === CellType.VISITED ||
-                        c.type === CellType.END ||
-                        c.type === CellType.START) {
-                    c.type = CellType.NONE
+                    if (c.type !== CellType.WALL || 
+                    c.type === CellType.VISITED ||
+                    c.type === CellType.ROUTE) {
+                        c.type = CellType.NONE
                     }
-                    c.inList = false
-                    c.end = false
-                    c.start = false
                     return c
                 })
                 return row
