@@ -208,15 +208,11 @@ class App extends React.Component {
             Adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
-                let nextY = prevGrid[y]
-                if (nextY !== undefined) {
-                    let next = nextY[x]
-                    if (next) {
-                        if (next.type === CellType.WALL ||
-                           (next.x === start.x && next.y === start.y)) return
-                    }
-                    else return
-                } else return
+                if (!prevGrid[y]) return
+                if (!prevGrid[y][x]) return
+                let next = prevGrid[y][x]
+                if (next.type === CellType.WALL ||
+                   (next.x === start.x && next.y === start.y)) return
 
                 if (!adjacencyListD[x+':'+y]) { // Not yet discovered
                     adjacencyListD[x+':'+y] = {

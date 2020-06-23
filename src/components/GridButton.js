@@ -23,21 +23,19 @@ const CellStyles = [
     }
 ]
 
-function GridButton (props) {
+function GridButton (props) { 
 
     const [, setState] = useState()
     const updateAnyway = () => {
         setState({})
     }
         
-    let style = CellStyles[0]
+    let style = CellStyles[props.cell.type]
     let text ='‎'  
     let isStart = props.start.x === props.x && props.start.y === props.y
     let isEnd = props.end.x === props.x && props.end.y === props.y
 
-    if (!isStart && !isEnd){
-        style = CellStyles[props.cell.type]
-    } else if (isStart) {
+    if (isStart) {
         style = CellStyles[2]
         text = 'S'
     } else if (isEnd) {

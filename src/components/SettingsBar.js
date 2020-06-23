@@ -13,7 +13,6 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
         let runButtonText = 'Run! '
 
         if (this.props.visualizationState === VizState.RUNNING) { 
-            console.log(this.props.visualizationState)
             runButtonStyle.background = '#eee'
             runButtonText = 'Skip visualization'
         } else if (this.props.visualizationState === VizState.FINISHED) {
@@ -29,6 +28,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                         name='algorithms' 
                         id='algorithms'
                         onChange={this.props.changeSelectedAlgorithm}
+                        disabled={this.props.visualizationState !== VizState.INACTIVE}
                     >
                          <option value={Alg.ASTAR}>A*</option>
                          <option value={Alg.DIJKSTRA}>Dijkstra</option>
@@ -43,6 +43,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                         name='mapItems' 
                         id='mapItems'
                         onChange={this.props.changeSelectedItem}
+                        disabled={this.props.visualizationState !== VizState.INACTIVE}
                     >
                          <option value={CellType.WALL}>Wall</option>
                          <option value={CellType.START}>Start Point</option>
