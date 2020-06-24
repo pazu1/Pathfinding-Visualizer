@@ -32,6 +32,13 @@ export const VizState = {
     FINISHED: 2
 }
 
+export const AlertTypes = {
+    NOSTART: 'Please add a start node.',
+    NOEND: 'Please add an end node.',
+    NOROUTE: 'Route was not found'
+}
+
+
 const WIDTH = 45
 const HEIGHT = 35
 
@@ -68,6 +75,7 @@ class App extends React.Component {
             algorithm: Alg.ASTAR,
             item: CellType.WALL,
             grid: newGrid,
+            activeAlert: null,
             visualizationState: VizState.INACTIVE,
             start: {
                 x: null,
@@ -88,6 +96,7 @@ class App extends React.Component {
         this.updateEnd = this.updateEnd.bind(this)
         this.updateRoute = this.updateRoute.bind(this)
         this.clearVisualization = this.clearVisualization.bind(this)
+        this.removeAlert = this.removeAlert.bind(this)
 
         this.algFunctions = {
             1: this.aStarPlus.bind(this),
@@ -105,8 +114,21 @@ class App extends React.Component {
         this.setState({algorithm: parseInt(event.target.value)})
     }
 
+    removeAlert() {
+        this.setState({activeAlert: null})
+    }
+
     onRunButtonClick() { // Or skip animation if clicked and was already running
-        console.log(this.state.end)
+        console.log(this.state.algorithm)
+        let { start, end } = this.state
+        if (!start.x) {
+            this.setState({activeAlert: AlertTypes.NOSTART})
+            return
+        } else if (!end.x) {
+            this.setState({activeAlert: AlertTypes.NOEND})
+            return
+        }
+
         if (this.state.visualizationState === VizState.RUNNING) {
             this.setState({
                 visualizationState: VizState.FINISHED
@@ -115,8 +137,8 @@ class App extends React.Component {
             this.clearVisualization()
         } else {
             this.setState({visualizationState: VizState.RUNNING},
-                () => this.algFunctions[this.state.algorithm](this.state.grid[this.state.start.y][this.state.start.x],
-                    this.state.grid[this.state.end.y][this.state.end.x])
+                () => this.algFunctions[this.state.algorithm](this.state.grid[start.y][start.x],
+                    this.state.grid[end.y][end.x])
             )
         }
     }
@@ -125,16 +147,19 @@ class App extends React.Component {
         this.setState({grid: this.drawnGrid})
     }
 
-    updateRoute() {
+    updateRoute(foundRoute) {
         this.setState((prevState) => {
-            let copyGrid = prevState.grid
-            this.route.map( coord => {
-                return copyGrid[coord.y][coord.x].type = CellType.ROUTE
-            })
-            return {
-                grid: copyGrid,
-                visualizationState: VizState.RUNNING
+            if (foundRoute) {
+                let copyGrid = prevState.grid
+                this.route.map( coord => {
+                    return copyGrid[coord.y][coord.x].type = CellType.ROUTE
+                })
+                return {
+                    grid: copyGrid,
+                    visualizationState: VizState.RUNNING
+                }
             }
+            return {}
         }, () => {this.setState({visualizationState: VizState.FINISHED})})
     }
 
@@ -177,6 +202,7 @@ class App extends React.Component {
     async aStarPlus(start, end, alg = Alg.ASTAR) { 
 
         // initialize
+        let foundRoute = false
         class Node {
           constructor(x, y, dist, gScore) {
             this.x = x
@@ -189,7 +215,7 @@ class App extends React.Component {
             return a.gScore >= b.gScore ? 1 : -1
         }
 
-        let queue = [] // Sorted each iteration, works as priority queue
+        let queue = [] 
         queue.push(new Node(start.x,start.y,0,0))
         let adjacencyListD = { 
             [start.x+':'+start.y]: null
@@ -201,6 +227,7 @@ class App extends React.Component {
             let current = queue.shift()
 
             if (current.x === end.x && current.y === end.y) { // found
+                foundRoute = true
                 break
             }
 
@@ -244,15 +271,17 @@ class App extends React.Component {
                 queue.sort(comparator)
             }
             if (this.state.visualizationState === VizState.RUNNING) {
-                await sleep(60)
+                await sleep(10)
                 this.setState({grid: prevGrid})
             }
         }
 
         // draw results
         this.setState({grid: prevGrid})
-        this.setRoute(adjacencyListD,end) 
-        this.updateRoute()
+        if (foundRoute) {
+            this.setRoute(adjacencyListD,end) 
+        }
+        this.updateRoute(foundRoute)
     }
 
     async DFS(start, end) {
@@ -264,12 +293,13 @@ class App extends React.Component {
 
     }
 
-    clearVisualization() {
+    clearVisualization(resetAll = false) {
         this.route = []
         this.setState((prevState) => {
             let clearedGrid = prevState.grid.map((row) => {
                 row = row.map((c) => {
-                    if (c.type !== CellType.WALL || 
+                    if (resetAll ||
+                    c.type !== CellType.WALL || 
                     c.type === CellType.VISITED ||
                     c.type === CellType.ROUTE) {
                         c.type = CellType.NONE
@@ -278,11 +308,15 @@ class App extends React.Component {
                 })
                 return row
             })
-
-            return {
+            let returnVal = {
                 grid: clearedGrid,
                 visualizationState: VizState.INACTIVE
             }
+            if (resetAll) {
+                returnVal.start = {x: null, y: null}
+                returnVal.end = {x: null, y: null}
+            }
+            return returnVal
         })
     }
 
@@ -310,7 +344,10 @@ class App extends React.Component {
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
                     onClick={this.onRunButtonClick}
+                    onResetClick={this.clearVisualization}
                     visualizationState={this.state.visualizationState}
+                    activeAlert={this.state.activeAlert}
+                    removeAlert={this.removeAlert}
                 />
                 <Grid
                     updateCell={this.updateDrawnCell}

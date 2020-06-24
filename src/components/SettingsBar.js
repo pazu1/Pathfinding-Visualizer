@@ -1,6 +1,7 @@
 import React from 'react';
+import Popup from "reactjs-popup"
 
-import { Alg, CellType, VizState } from './App.js'
+import { Alg, CellType, VizState, AlertTypes } from './App.js'
 
 class SettingsBar extends React.Component { // TODO: add reset button and disable settings when algorithm is running
 
@@ -17,7 +18,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
             runButtonText = 'Skip visualization'
         } else if (this.props.visualizationState === VizState.FINISHED) {
             runButtonStyle.background = '#eee'
-            runButtonText = 'Clear visualization'
+            runButtonText = 'Clear route'
         }
 
         return (
@@ -37,21 +38,43 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                     </select>
                 </div>
 
-                <div>
-                    <label>Place item: </label>
-                    <select 
-                        name='mapItems' 
-                        id='mapItems'
-                        onChange={this.props.changeSelectedItem}
-                        disabled={this.props.visualizationState !== VizState.INACTIVE}
-                    >
-                         <option value={CellType.WALL}>Wall</option>
-                         <option value={CellType.START}>Start Point</option>
-                         <option value={CellType.END}>End Point</option>
-                    </select>
-                </div>
+
+                <Popup
+                    trigger={
+                        <div>
+                            <label>Place item: </label>
+                            <select 
+                                name='mapItems' 
+                                id='mapItems'
+                                onChange={this.props.changeSelectedItem}
+                                disabled={this.props.visualizationState !== VizState.INACTIVE}
+                            >
+                                 <option value={CellType.WALL}>Wall</option>
+                                 <option value={CellType.START}>Start Point</option>
+                                 <option value={CellType.END}>End Point</option>
+                            </select>
+                        </div>
+                    }
+                    position='bottom center'
+                    open={this.props.activeAlert === AlertTypes.NOSTART ||
+                    this.props.activeAlert === AlertTypes.NOEND}
+                    on='none'
+                    onClose={this.props.removeAlert}
+                >
+                    {this.props.activeAlert} 
+                </Popup>
+
 
                 <br/>
+
+                <button 
+                    type='button' 
+                    className='settingsButton'
+                    style={{display: this.props.visualizationState !== VizState.RUNNING ? null : 'none' }}
+                    onClick={() => this.props.onResetClick(true)}
+                >
+                    Reset grid
+                </button>
 
                 <button 
                     style={runButtonStyle}
@@ -61,6 +84,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                 >
                     {runButtonText}
                 </button>
+
             </div>
         )
     }
