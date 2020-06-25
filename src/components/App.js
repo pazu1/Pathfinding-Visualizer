@@ -121,10 +121,10 @@ class App extends React.Component {
     onRunButtonClick() { // Or skip animation if clicked and was already running
         console.log(this.state.algorithm)
         let { start, end } = this.state
-        if (!start.x) {
+        if (start.x === null) {
             this.setState({activeAlert: AlertTypes.NOSTART})
             return
-        } else if (!end.x) {
+        } else if (end.x === null) {
             this.setState({activeAlert: AlertTypes.NOEND})
             return
         }
@@ -277,9 +277,11 @@ class App extends React.Component {
         }
 
         // draw results
-        this.setState({grid: prevGrid})
         if (foundRoute) {
             this.setRoute(adjacencyListD,end) 
+        }
+        if (this.state.visualizationState === VizState.RUNNING) {
+            await sleep(200)
         }
         this.updateRoute(foundRoute)
     }

@@ -50,12 +50,13 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                                 disabled={this.props.visualizationState !== VizState.INACTIVE}
                             >
                                  <option value={CellType.WALL}>Wall</option>
-                                 <option value={CellType.START}>Start Point</option>
-                                 <option value={CellType.END}>End Point</option>
+                                 <option value={CellType.START}>Start node</option>
+                                 <option value={CellType.END}>End node</option>
                             </select>
                         </div>
                     }
                     position='bottom center'
+                    closeOnDocumentClick
                     open={this.props.activeAlert === AlertTypes.NOSTART ||
                     this.props.activeAlert === AlertTypes.NOEND}
                     on='none'

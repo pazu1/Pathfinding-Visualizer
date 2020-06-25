@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react'
 
 const CellStyles = [
     {
-        background: '#FFF',
+        background: '#eee',
         color: '#000'
     },
     {
@@ -17,18 +17,26 @@ const CellStyles = [
     },
     {
         background: '#38ffc7',
+        transform: 'scale(0.1)' // TODO: set a different style for beginning of visited to animate it 
     },
     {
         background: '#f05e54'
     }
 ]
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function GridButton (props) { 
 
     const [, setState] = useState()
+
     const updateAnyway = () => {
         setState({})
     }
+
+    const compRef = useRef()
         
     let style = CellStyles[props.cell.type]
     let text ='‎'  
@@ -43,8 +51,17 @@ function GridButton (props) {
         text = 'E'
     }
 
+    let isVisited = props.cell.type === 4 
+    useEffect(() => { // Animate visiting nodes
+        if (isVisited) {
+        sleep(400).then(() => {
+            compRef.current.style.transform = 'scale(1.0)' 
+        })}
+    }, [isVisited])
+
     return(
         <button 
+            ref = {compRef}
             type='button' 
             className='gridButton'
             style={style}
