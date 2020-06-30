@@ -59,10 +59,9 @@ class App extends React.Component {
                 newGrid[y].push({
                     type: CellType.NONE,
                     weight: 0, // TODO
-                    startPoint: false,
-                    endPoint: false,
                     x: x,
-                    y: y
+                    y: y,
+                    ref: null
                 })
             }
         }
@@ -78,7 +77,6 @@ class App extends React.Component {
         this.state = {
             algorithm: Alg.ASTAR,
             item: CellType.WALL,
-            grid: newGrid,
             activeAlert: null,
             visualizationState: VizState.INACTIVE,
             start: { x: null, y: null },
@@ -200,7 +198,7 @@ class App extends React.Component {
         let adjacencyListD = { 
             [start.x+':'+start.y]: null
         }
-        let prevGrid = this.state.grid
+        let algGrid = this.drawnGrid
 
         // perform search
         while (queue.length) {
@@ -214,9 +212,9 @@ class App extends React.Component {
             Adjacent.forEach((direction) => {
                 let x = current.x+direction[0]
                 let y = current.y+direction[1]
-                if (!prevGrid[y]) return
-                if (!prevGrid[y][x]) return
-                let next = prevGrid[y][x]
+                if (!algGrid[y]) return
+                if (!algGrid[y][x]) return
+                let next = algGrid[y][x]
                 if (next.type === CellType.WALL ||
                    (next.x === start.x && next.y === start.y)) return
 
@@ -246,13 +244,14 @@ class App extends React.Component {
                     }
                 }
             })
-            prevGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
+            algGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
             if (alg === Alg.ASTAR ) {
                 queue.sort(comparator)
             }
             if (this.state.visualizationState === VizState.RUNNING) {
-                await sleep(10)
-                this.setState({grid: prevGrid})
+                await sleep(20)
+                algGrid[current.y][current.x].ref.current.style.background ='#38ffc7'
+                algGrid[current.y][current.x].ref.current.style.transform ='scale(0.5)'
             }
         }
 

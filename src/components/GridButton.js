@@ -37,6 +37,7 @@ function GridButton (props) {
     }
 
     const compRef = useRef()
+    props.cell.ref = compRef
     let text ='‎'  
 
     useEffect(() => { 

@@ -20,7 +20,7 @@ class Grid extends React.Component {
     render() {
 
         let y = -1
-        let tableContent = this.props.grid.map(row => { 
+        let tableContent = this.props.drawnGrid.map(row => { 
             let x = -1
             y++
             let rowContent = row.map(cell => {
