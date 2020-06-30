@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import SettingsBar from './SettingsBar'
 import Grid from './Grid'
@@ -39,8 +39,8 @@ export const AlertTypes = {
 }
 
 
-const WIDTH = 45
-const HEIGHT = 35
+export const WIDTH = 45
+export const HEIGHT = 35
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -67,8 +67,12 @@ class App extends React.Component {
             }
         }
 
-        this.drawnGrid = newGrid // grid drawn by the user is stored here
-                                 // and only copied to state when Run is clicked
+        // These variables are updated to state when Run-button is clicked
+        this.drawnGrid = newGrid 
+        this.drawnStart = { x: null, y: null }
+        this.drawnEnd = { x: null, y: null }
+                                 
+
         this.route = []
 
         this.state = {
@@ -77,23 +81,14 @@ class App extends React.Component {
             grid: newGrid,
             activeAlert: null,
             visualizationState: VizState.INACTIVE,
-            start: {
-                x: null,
-                y: null
-            },
-            end: {
-                x: null,
-                y: null
-            }
+            start: { x: null, y: null },
+            end: { x: null, y: null }
         }
 
         this.updateDrawnCell = this.updateDrawnCell.bind(this)
         this.changeAlgorithm = this.changeAlgorithm.bind(this)
         this.changeItem = this.changeItem.bind(this)
         this.onRunButtonClick = this.onRunButtonClick.bind(this)
-        this.updateStateGrid = this.updateStateGrid.bind(this)
-        this.updateStart = this.updateStart.bind(this)
-        this.updateEnd = this.updateEnd.bind(this)
         this.updateRoute = this.updateRoute.bind(this)
         this.clearVisualization = this.clearVisualization.bind(this)
         this.removeAlert = this.removeAlert.bind(this)
@@ -119,8 +114,8 @@ class App extends React.Component {
     }
 
     onRunButtonClick() { // Or skip animation if clicked and was already running
-        console.log(this.state.algorithm)
-        let { start, end } = this.state
+        let start = this.drawnStart
+        let end = this.drawnEnd
         if (start.x === null) {
             this.setState({activeAlert: AlertTypes.NOSTART})
             return
@@ -136,15 +131,15 @@ class App extends React.Component {
         } else if (this.state.visualizationState === VizState.FINISHED) {
             this.clearVisualization()
         } else {
-            this.setState({visualizationState: VizState.RUNNING},
+            this.setState({
+                grid: this.drawnGrid, // why is this line not needed???
+                start: start,
+                end: end,
+                visualizationState: VizState.RUNNING},
                 () => this.algFunctions[this.state.algorithm](this.state.grid[start.y][start.x],
                     this.state.grid[end.y][end.x])
             )
         }
-    }
-
-    updateStateGrid() {
-        this.setState({grid: this.drawnGrid})
     }
 
     updateRoute(foundRoute) {
@@ -165,38 +160,23 @@ class App extends React.Component {
 
     updateDrawnCell(x, y) {
         if (this.state.item ===  CellType.START) { 
-            if (this.state.start.x !== null && this.state.start.y !== null) {
-                let prevX = this.state.start.x
-                let prevY = this.state.start.y
-                this.drawnGrid[prevY][prevX].type = CellType.None
+            if (this.drawnStart.x !== null && this.drawnStart.y !== null) {
+                console.log('Prev start')
+                let prevX = this.drawnStart.x
+                let prevY = this.drawnStart.y
+                this.drawnGrid[prevY][prevX].type = CellType.NONE
             }
-            this.updateStart(x,y)
+            this.drawnStart = {x: x, y: y}
         } else if (this.state.item ===  CellType.END) { 
-            if (this.state.end.x !== null && this.state.end.y !== null) {
-                let prevX = this.state.end.x
-                let prevY = this.state.end.y
-                this.drawnGrid[prevY][prevX].type = CellType.None
+            if (this.drawnEnd.x !== null && this.drawnEnd.y !== null) {
+                let prevX = this.drawnEnd.x
+                let prevY = this.drawnEnd.y
+                this.drawnGrid[prevY][prevX].type = CellType.NONE
             }
-            this.updateEnd(x,y)
+            this.drawnEnd = {x: x, y: y}
         } 
 
         this.drawnGrid[y][x].type = this.state.item
-    }
-
-    updateEnd(x, y) {
-        let newEnd = {
-            x: x,
-            y: y
-        }
-        this.setState({end: newEnd})
-    }
-        
-    updateStart(x, y) {
-        let newStart = {
-            x: x,
-            y: y
-        }
-        this.setState({start: newStart})
     }
 
     async aStarPlus(start, end, alg = Alg.ASTAR) { 
@@ -355,8 +335,8 @@ class App extends React.Component {
                     updateCell={this.updateDrawnCell}
                     selectedItem={this.state.item}
                     grid={this.state.grid}
-                    start={this.state.start}
-                    end={this.state.end}
+                    drawnGrid={this.drawnGrid}
+                    disableDrawing={this.state.visualizationState !== VizState.INACTIVE}
                 />
             </div>
         )

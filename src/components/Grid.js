@@ -28,14 +28,13 @@ class Grid extends React.Component {
                 return(
                     <td key={x}>
                         <GridButton 
-                            cell={this.props.grid[y][x]}
+                            cell={this.props.drawnGrid[y][x]}
                             x={x}
                             y={y}
                             clickFunction={this.props.updateCell}
                             selectedItem={this.props.selectedItem}
                             drawing={this.state.drawing}
-                            start={this.props.start}
-                            end={this.props.end}
+                            disableDrawing={this.props.disableDrawing}
                         />
                     </td>
                 )

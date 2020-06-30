@@ -17,7 +17,7 @@ const CellStyles = [
     },
     {
         background: '#38ffc7',
-        transform: 'scale(0.1)' // TODO: set a different style for beginning of visited to animate it 
+        transform: 'scale(0.1)' 
     },
     {
         background: '#f05e54'
@@ -37,45 +37,41 @@ function GridButton (props) {
     }
 
     const compRef = useRef()
-        
-    let style = CellStyles[props.cell.type]
     let text ='‎'  
-    let isStart = props.start.x === props.x && props.start.y === props.y
-    let isEnd = props.end.x === props.x && props.end.y === props.y
 
-    if (isStart) {
-        style = CellStyles[2]
-        text = 'S'
-    } else if (isEnd) {
-        style = CellStyles[3]
-        text = 'E'
-    }
+    useEffect(() => { 
+        let cStyle = CellStyles[props.cell.type]
+        console.log("UPDATED")
+        compRef.current.style.background = cStyle.background
+        compRef.current.style.color = cStyle.color
+        compRef.current.style.transform = cStyle.transform
 
-    let isVisited = props.cell.type === 4 
-    useEffect(() => { // Animate visiting nodes
+        let isVisited = props.cell.type === 4 
         if (isVisited) {
         sleep(400).then(() => {
             compRef.current.style.transform = 'scale(1.0)' 
         })}
-    }, [isVisited])
+        updateAnyway() // this should fix some stuff
+    }, [props.cell.type])
 
     return(
         <button 
-            ref = {compRef}
+            ref={compRef}
             type='button' 
             className='gridButton'
-            style={style}
 
             onMouseDown = {() => {
-                props.clickFunction(props.x, props.y)
-                updateAnyway()
-                
-            }}
-            onMouseOver = {() => {
-                if (props.drawing) {
+                if (!props.disableDrawing) {
                     props.clickFunction(props.x, props.y)
                     updateAnyway()
                 }
+                
+            }}
+            onMouseOver = {() => {
+                if (props.drawing && !props.disableDrawing) {
+                    props.clickFunction(props.x, props.y)
+                }
+                    updateAnyway()
             }}
         >
             {text}

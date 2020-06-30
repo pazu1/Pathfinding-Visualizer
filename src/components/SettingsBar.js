@@ -71,7 +71,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                 <button 
                     type='button' 
                     className='settingsButton'
-                    style={{display: this.props.visualizationState !== VizState.RUNNING ? null : 'none' }}
+                    disabled={this.props.visualizationState === VizState.RUNNING }
                     onClick={() => this.props.onResetClick(true)}
                 >
                     Reset grid
