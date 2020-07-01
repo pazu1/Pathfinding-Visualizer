@@ -20,7 +20,7 @@ class Grid extends React.Component {
     render() {
 
         let y = -1
-        let tableContent = this.props.drawnGrid.map(row => { 
+        let tableContent = this.props.grid.map(row => { 
             let x = -1
             y++
             let rowContent = row.map(cell => {
@@ -28,7 +28,7 @@ class Grid extends React.Component {
                 return(
                     <td key={x}>
                         <GridButton 
-                            cell={this.props.drawnGrid[y][x]}
+                            cell={this.props.grid[y][x]}
                             x={x}
                             y={y}
                             clickFunction={this.props.updateCell}

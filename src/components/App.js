@@ -2,49 +2,11 @@ import React from 'react'
 
 import SettingsBar from './SettingsBar'
 import Grid from './Grid'
-
-export const Alg = {
-    ASTAR: 1,
-    DIJKSTRA: 2,
-    BFS: 3,
-    DFS: 4
-}
-
-export const CellType = {
-    NONE: 0,
-    WALL: 1,
-    START: 2,
-    END: 3,
-    VISITED: 4,
-    ROUTE: 5
-}
-
-const Adjacent = [
-    [-1,0],
-    [0,1],
-    [1,0],
-    [0,-1]
-]
-
-export const VizState = {
-    INACTIVE: 0,
-    RUNNING: 1,
-    FINISHED: 2
-}
-
-export const AlertTypes = {
-    NOSTART: 'Please add a start node.',
-    NOEND: 'Please add an end node.',
-    NOROUTE: 'Route was not found'
-}
-
+import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
+import { sleep, applyStyle } from '../extfunctions'
 
 export const WIDTH = 45
 export const HEIGHT = 35
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 class App extends React.Component {
 
@@ -66,12 +28,9 @@ class App extends React.Component {
             }
         }
 
-        // These variables are updated to state when Run-button is clicked
-        this.drawnGrid = newGrid 
-        this.drawnStart = { x: null, y: null }
-        this.drawnEnd = { x: null, y: null }
-                                 
-
+        this.grid = newGrid 
+        this.start = { x: null, y: null }
+        this.end = { x: null, y: null } 
         this.route = []
 
         this.state = {
@@ -79,8 +38,6 @@ class App extends React.Component {
             item: CellType.WALL,
             activeAlert: null,
             visualizationState: VizState.INACTIVE,
-            start: { x: null, y: null },
-            end: { x: null, y: null }
         }
 
         this.updateDrawnCell = this.updateDrawnCell.bind(this)
@@ -112,8 +69,8 @@ class App extends React.Component {
     }
 
     onRunButtonClick() { // Or skip animation if clicked and was already running
-        let start = this.drawnStart
-        let end = this.drawnEnd
+        let start = this.start
+        let end = this.end
         if (start.x === null) {
             this.setState({activeAlert: AlertTypes.NOSTART})
             return
@@ -130,7 +87,7 @@ class App extends React.Component {
             this.clearVisualization()
         } else {
             this.setState({
-                grid: this.drawnGrid, // why is this line not needed???
+                grid: this.grid, // why is this line not needed???
                 start: start,
                 end: end,
                 visualizationState: VizState.RUNNING},
@@ -158,23 +115,22 @@ class App extends React.Component {
 
     updateDrawnCell(x, y) {
         if (this.state.item ===  CellType.START) { 
-            if (this.drawnStart.x !== null && this.drawnStart.y !== null) {
-                console.log('Prev start')
-                let prevX = this.drawnStart.x
-                let prevY = this.drawnStart.y
-                this.drawnGrid[prevY][prevX].type = CellType.NONE
+            if (this.start.x !== null && this.start.y !== null) {
+                let prevX = this.start.x
+                let prevY = this.start.y
+                this.grid[prevY][prevX].type = CellType.NONE
             }
-            this.drawnStart = {x: x, y: y}
+            this.start = {x: x, y: y}
         } else if (this.state.item ===  CellType.END) { 
-            if (this.drawnEnd.x !== null && this.drawnEnd.y !== null) {
-                let prevX = this.drawnEnd.x
-                let prevY = this.drawnEnd.y
-                this.drawnGrid[prevY][prevX].type = CellType.NONE
+            if (this.end.x !== null && this.end.y !== null) {
+                let prevX = this.end.x
+                let prevY = this.end.y
+                this.grid[prevY][prevX].type = CellType.NONE
             }
-            this.drawnEnd = {x: x, y: y}
+            this.end = {x: x, y: y}
         } 
 
-        this.drawnGrid[y][x].type = this.state.item
+        this.grid[y][x].type = this.state.item
     }
 
     async aStarPlus(start, end, alg = Alg.ASTAR) { 
@@ -198,7 +154,7 @@ class App extends React.Component {
         let adjacencyListD = { 
             [start.x+':'+start.y]: null
         }
-        let algGrid = this.drawnGrid
+        let algGrid = this.grid
 
         // perform search
         while (queue.length) {
@@ -244,14 +200,17 @@ class App extends React.Component {
                     }
                 }
             })
-            algGrid[current.y][current.x].type = CellType.VISITED // Mark current as visited
+            let currentCell = algGrid[current.y][current.x]
+            if (currentCell.type !== CellType.START) { // Mark current as visited 
+                currentCell.type = CellType.VISITED 
+                applyStyle(CellStyles[CellType.VISITED], currentCell.ref)
+            }
+
             if (alg === Alg.ASTAR ) {
                 queue.sort(comparator)
             }
             if (this.state.visualizationState === VizState.RUNNING) {
                 await sleep(20)
-                algGrid[current.y][current.x].ref.current.style.background ='#38ffc7'
-                algGrid[current.y][current.x].ref.current.style.transform ='scale(0.5)'
             }
         }
 
@@ -260,7 +219,7 @@ class App extends React.Component {
             this.setRoute(adjacencyListD,end) 
         }
         if (this.state.visualizationState === VizState.RUNNING) {
-            await sleep(200)
+            await sleep(100)
         }
         this.updateRoute(foundRoute)
     }
@@ -276,10 +235,15 @@ class App extends React.Component {
 
     clearVisualization(resetAll = false) {
         this.route = []
+
         this.setState((prevState) => {
             let clearedGrid = prevState.grid.map((row) => {
                 row = row.map((c) => {
-                    if (resetAll ||
+                    if (c.x === this.start.x && c.y === this.start.y) 
+                        c.type = CellType.START
+                    else if (c.x === this.end.x && c.y === this.end.y) 
+                        c.type = CellType.END
+                    else if (resetAll ||
                     c.type !== CellType.WALL || 
                     c.type === CellType.VISITED ||
                     c.type === CellType.ROUTE) {
@@ -293,12 +257,13 @@ class App extends React.Component {
                 grid: clearedGrid,
                 visualizationState: VizState.INACTIVE
             }
-            if (resetAll) {
-                returnVal.start = {x: null, y: null}
-                returnVal.end = {x: null, y: null}
-            }
             return returnVal
         })
+        if (resetAll) {
+            this.start = {x: null, y: null }
+            this.end = {x: null, y: null }
+        }
+            
     }
 
     setRoute(adjacencyList, end) {
@@ -333,8 +298,7 @@ class App extends React.Component {
                 <Grid
                     updateCell={this.updateDrawnCell}
                     selectedItem={this.state.item}
-                    grid={this.state.grid}
-                    drawnGrid={this.drawnGrid}
+                    grid={this.grid}
                     disableDrawing={this.state.visualizationState !== VizState.INACTIVE}
                 />
             </div>

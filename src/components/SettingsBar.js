@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from "reactjs-popup"
 
-import { Alg, CellType, VizState, AlertTypes } from './App.js'
+import { Alg, CellType, VizState, AlertTypes } from '../constvar'
 
 class SettingsBar extends React.Component { // TODO: add reset button and disable settings when algorithm is running
 
