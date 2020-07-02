@@ -32,7 +32,6 @@ class Grid extends React.Component {
                             x={x}
                             y={y}
                             clickFunction={this.props.updateCell}
-                            selectedItem={this.props.selectedItem}
                             drawing={this.state.drawing}
                             disableDrawing={this.props.disableDrawing}
                         />

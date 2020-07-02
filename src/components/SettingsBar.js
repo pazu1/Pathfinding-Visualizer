@@ -22,6 +22,11 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
         }
 
         return (
+            <div>
+            <div className='itemBar'>
+                <button
+                className='itemButton'>X</button>
+            </div>
             <div className='topBar'>
                 <div>
                     <label>Algorithm: </label>
@@ -52,6 +57,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                                  <option value={CellType.WALL}>Wall</option>
                                  <option value={CellType.START}>Start node</option>
                                  <option value={CellType.END}>End node</option>
+                                 <option value={CellType.NONE}>Erase</option>
                             </select>
                         </div>
                     }
@@ -64,7 +70,6 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                 >
                     {this.props.activeAlert} 
                 </Popup>
-
 
                 <br/>
 
@@ -86,6 +91,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                     {runButtonText}
                 </button>
 
+            </div>
             </div>
         )
     }

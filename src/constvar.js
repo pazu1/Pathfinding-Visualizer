@@ -11,15 +11,17 @@ export const CellStyles = [
     },
     {
         background: '#d2ff4a',
-        transform: 'scale(1.0)'
+        transform: 'scale(1.0)',
+        textContent: 's'
     },
     {
         background: '#fcba03',
-        transform: 'scale(1.0)'
+        transform: 'scale(1.0)',
+        textContent: 'e'
     },
     {
         background: '#38ffc7',
-        transform: 'scale(0.5)' 
+        transform: 'scale(0.2)'
     },
     {
         background: '#f05e54',
