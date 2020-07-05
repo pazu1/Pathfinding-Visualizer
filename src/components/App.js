@@ -121,7 +121,6 @@ class App extends React.Component {
                 this.grid[prevY][prevX].ref.current.textContent = '‎'  
         }
 
-        // Start node, End node or Eraser
         if (itemType ===  CellType.START) { 
             if (this.start.x !== null && this.start.y !== null) {
                 replaceCell(this.start)
@@ -132,7 +131,7 @@ class App extends React.Component {
                 replaceCell(this.end)
             }
             this.end = {x: x, y: y}
-        } else if (itemType ===  CellType.NONE) { 
+        } else if (itemType ===  CellType.NONE || itemType === CellType.WALL) { 
             if (this.end.x === x && this.end.y === y ) {
                 replaceCell(this.end)
                 this.end = {x: null, y: null}
@@ -222,6 +221,7 @@ class App extends React.Component {
                         ref.current.style.transform = 'scale(1.0)'
                     })
                 })
+                console.log(currentCell.ref)
             }
 
             if (alg === Alg.ASTAR ) {
