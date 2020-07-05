@@ -121,7 +121,7 @@ class App extends React.Component {
                 this.grid[prevY][prevX].ref.current.textContent = '‎'  
         }
 
-        // Case: start or end nodes
+        // Start node, End node or Eraser
         if (itemType ===  CellType.START) { 
             if (this.start.x !== null && this.start.y !== null) {
                 replaceCell(this.start)
@@ -142,7 +142,6 @@ class App extends React.Component {
                 this.start = {x: null, y: null}
             }
         }
-            
 
         this.grid[y][x].type = itemType
         applyStyle(CellStyles[itemType], this.grid[y][x].ref)
@@ -161,7 +160,7 @@ class App extends React.Component {
           }
         }
         const comparator = (a,b) => { 
-            return a.gScore >= b.gScore ? 1 : -1
+            return a.gScore > b.gScore ? 1 : -1
         }
 
         let queue = [] 
@@ -198,7 +197,7 @@ class App extends React.Component {
                 }
 
                 let distance = current.distance+1  
-                const multiplier = 1
+                const multiplier = 1.0
                 let gScore = distance + multiplier*(Math.abs(end.x - x) + Math.abs(end.y - y))
 
                 if (distance < adjacencyListD[x+':'+y].d) { // Found a shorter path
