@@ -82,8 +82,8 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                     disabled={this.props.visualizationState === VizState.RUNNING }
                     onClick={() => this.props.onResetClick(true)}
                 >
-                    Reset grid
                     <ion-icon name='trash-outline'></ion-icon>
+                    Reset grid
                 </button>
 
                 <button 
@@ -92,9 +92,9 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                     className='settingsButton'
                     onClick={this.props.onClick}
                 >
-                    {runButtonText}
                     <ion-icon name={ runButtonIcon }
                     ></ion-icon>
+                    {runButtonText}
                 </button>
 
             </div>
