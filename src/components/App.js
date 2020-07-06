@@ -217,11 +217,10 @@ class App extends React.Component {
             if (currentCell.type !== CellType.START) { // Mark current as visited 
                 currentCell.type = CellType.VISITED 
                 applyStyle(CellStyles[CellType.VISITED], currentCell.ref, (ref) => {
-                    sleep(500).then(() => {
+                    sleep(400).then(() => {
                         ref.current.style.transform = 'scale(1.0)'
                     })
                 })
-                console.log(currentCell.ref)
             }
 
             if (alg === Alg.ASTAR ) {

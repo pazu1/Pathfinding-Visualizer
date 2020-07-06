@@ -12,13 +12,16 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
         }
 
         let runButtonText = 'Run! '
+        let runButtonIcon = 'play-outline'
 
         if (this.props.visualizationState === VizState.RUNNING) { 
             runButtonStyle.background = '#eee'
             runButtonText = 'Skip visualization'
+            runButtonIcon = 'play-forward-outline'
         } else if (this.props.visualizationState === VizState.FINISHED) {
             runButtonStyle.background = '#eee'
             runButtonText = 'Clear route'
+            runButtonIcon = 'refresh-outline'
         }
 
         return (
@@ -27,7 +30,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                 <button
                 className='itemButton'>X</button>
             </div>
-            <div className='topBar'>
+                <div className='topBar'>
                 <div>
                     <label>Algorithm: </label>
                     <select 
@@ -80,6 +83,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                     onClick={() => this.props.onResetClick(true)}
                 >
                     Reset grid
+                    <ion-icon name='trash-outline'></ion-icon>
                 </button>
 
                 <button 
@@ -89,6 +93,8 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                     onClick={this.props.onClick}
                 >
                     {runButtonText}
+                    <ion-icon name={ runButtonIcon }
+                    ></ion-icon>
                 </button>
 
             </div>
