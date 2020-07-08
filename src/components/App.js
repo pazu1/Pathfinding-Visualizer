@@ -51,7 +51,6 @@ class App extends React.Component {
     createGrid() {
         let rows = Math.floor((window.innerHeight*0.8) / CELLSIZE)
         let cols = Math.floor((window.innerWidth*0.8) / CELLSIZE)
-        console.log(rows, cols)
         let newGrid = []
         for (let y=0;y<rows;y++) {
             newGrid.push([])
@@ -175,7 +174,6 @@ class App extends React.Component {
 
         const canBeOpened = (cell) => {
             let psgCount = 0
-            console.log(cell)
             if (!cell) return false
             Adjacent.forEach(direction => {
                 let x = cell.x+direction[0]
@@ -189,7 +187,6 @@ class App extends React.Component {
         while (wallList.length) {
             let index = Math.floor(Math.random() * wallList.length)
             let wall =  wallList[index]
-            console.log(wall)
             if (canBeOpened(wall)) {
                 wall.type = CellType.NONE
                 Adjacent.forEach((direction) => {
