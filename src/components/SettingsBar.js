@@ -71,15 +71,24 @@ class SettingsBar extends React.Component {
 
                 <br/>
 
-                    <div className='sliderContainer'>
-                        <label>Visualization speed:</label>
-                        <RangeSlider
-                            min={10}
-                            max={100}
-                            value={this.props.visualizationSpeed}
-                            onChange={(e) => this.props.changeVisSpeed(e.target.value)}
-                        />
-                    </div>
+                <div className='sliderContainer'>
+                    <label>Visualization speed:</label>
+                    <RangeSlider
+                        min={10}
+                        max={100}
+                        value={this.props.visualizationSpeed}
+                        onChange={(e) => this.props.changeVisSpeed(e.target.value)}
+                    />
+                </div>
+
+                <button 
+                    type='button' 
+                    className='settingsButton'
+                    disabled={this.props.visualizationState === VizState.RUNNING }
+                    onClick={() => this.props.onMazeClick()}
+                >
+                    Generate maze 
+                </button>
 
                 <button 
                     type='button' 

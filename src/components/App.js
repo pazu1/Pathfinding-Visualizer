@@ -34,6 +34,7 @@ class App extends React.Component {
         this.removeAlert = this.removeAlert.bind(this)
         this.changeVisSpeed = this.changeVisSpeed.bind(this)
         this.createGrid = this.createGrid.bind(this)
+        this.generateMaze = this.generateMaze.bind(this)
 
         this.algFunctions = {
             1: this.aStarPlus.bind(this),
@@ -161,6 +162,53 @@ class App extends React.Component {
 
         this.grid[y][x].type = itemType
         applyStyle(CellStyles[itemType], this.grid[y][x].ref)
+    }
+
+    generateMaze() { // Prim's Algorithm
+        this.grid.forEach(row => {
+            row.forEach(cell => {
+                cell.type = CellType.WALL
+            })
+        })
+
+        let wallList = [this.grid[1][1]]
+
+        const canBeOpened = (cell) => {
+            let psgCount = 0
+            console.log(cell)
+            if (!cell) return false
+            Adjacent.forEach(direction => {
+                let x = cell.x+direction[0]
+                let y = cell.y+direction[1]
+                if (!this.grid[y] || !this.grid[y][x]) return
+                if (this.grid[y][x].type === CellType.NONE) psgCount += 1
+            })
+            return ( psgCount <= 1 )
+        }
+
+        while (wallList.length) {
+            let index = Math.floor(Math.random() * wallList.length)
+            let wall =  wallList[index]
+            console.log(wall)
+            if (canBeOpened(wall)) {
+                wall.type = CellType.NONE
+                Adjacent.forEach((direction) => {
+                    let x = wall.x+direction[0]
+                    let y = wall.y+direction[1]
+                    if (!this.grid[y] || !this.grid[y][x]) return
+                    wallList.push(this.grid[y][x])
+                })
+            }
+            wallList.splice(index,1)
+        }
+        
+        // draw results
+        this.grid.forEach(row => {
+            row.forEach(cell => {
+                this.drawOnGrid(cell.x, cell.y, cell.type)
+            })
+        })
+
     }
 
     async aStarPlus(start, end, alg = Alg.ASTAR) { 
@@ -323,6 +371,7 @@ class App extends React.Component {
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
                     onClick={this.onRunButtonClick}
+                    onMazeClick={this.generateMaze}
                     onResetClick={this.clearVisualization}
                     visualizationState={this.state.visualizationState}
                     changeVisSpeed={this.changeVisSpeed}
