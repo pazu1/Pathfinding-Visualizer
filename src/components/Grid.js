@@ -11,6 +11,7 @@ class Grid extends React.Component {
             drawing: false,
             runningAlgorithm: false
         }
+
     }
 
     handleMouse(event, pressed) {

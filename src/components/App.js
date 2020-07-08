@@ -7,6 +7,7 @@ import { sleep, applyStyle } from '../extfunctions'
 
 export const WIDTH = 45
 export const HEIGHT = 35
+const CELLSIZE = 20
 
 class App extends React.Component {
 
@@ -14,21 +15,7 @@ class App extends React.Component {
         super()
 
         // Make grid
-        let newGrid = []
-        for (let y=0;y<HEIGHT;y++) {
-            newGrid.push([])
-            for (let x=0;x<WIDTH;x++) {
-                newGrid[y].push({
-                    type: CellType.NONE,
-                    weight: 0, // TODO
-                    x: x,
-                    y: y,
-                    ref: null
-                })
-            }
-        }
-
-        this.grid = newGrid 
+        this.grid = []
         this.start = { x: null, y: null }
         this.end = { x: null, y: null } 
         this.route = []
@@ -38,6 +25,7 @@ class App extends React.Component {
             item: CellType.WALL,
             activeAlert: null,
             visualizationState: VizState.INACTIVE,
+            visualizationSpeed: 90
         }
 
         this.drawOnGrid = this.drawOnGrid.bind(this)
@@ -47,6 +35,8 @@ class App extends React.Component {
         this.updateRoute = this.updateRoute.bind(this)
         this.clearVisualization = this.clearVisualization.bind(this)
         this.removeAlert = this.removeAlert.bind(this)
+        this.changeVisSpeed = this.changeVisSpeed.bind(this)
+        this.createGrid = this.createGrid.bind(this)
 
         this.algFunctions = {
             1: this.aStarPlus.bind(this),
@@ -55,6 +45,32 @@ class App extends React.Component {
             4: this.DFS.bind(this)
         }
     }
+
+    componentDidMount() {
+        this.createGrid()
+    }
+
+    createGrid() {
+        let rows = Math.floor((window.innerHeight*0.8) / CELLSIZE)
+        let cols = Math.floor((window.innerWidth*0.8) / CELLSIZE)
+        console.log(rows, cols)
+        let newGrid = []
+        for (let y=0;y<rows;y++) {
+            newGrid.push([])
+            for (let x=0;x<cols;x++) {
+                newGrid[y].push({
+                    type: CellType.NONE,
+                    weight: 0, // TODO
+                    x: x,
+                    y: y,
+                    ref: null
+                })
+            }
+        }
+        this.grid = newGrid
+        this.setState({})
+    }
+
 
     changeItem(event) {
         this.setState({item: parseInt(event.target.value)})
@@ -66,6 +82,10 @@ class App extends React.Component {
 
     removeAlert() {
         this.setState({activeAlert: null})
+    }
+
+    changeVisSpeed(value) {
+        this.setState({ visualizationSpeed: value })
     }
 
     onRunButtonClick() { // Or skip animation if clicked and was already running
@@ -227,7 +247,7 @@ class App extends React.Component {
                 queue.sort(comparator)
             }
             if (this.state.visualizationState === VizState.RUNNING) {
-                await sleep(20)
+                await sleep(Math.abs(this.state.visualizationSpeed-110))
             }
         }
 
@@ -305,6 +325,8 @@ class App extends React.Component {
                     onClick={this.onRunButtonClick}
                     onResetClick={this.clearVisualization}
                     visualizationState={this.state.visualizationState}
+                    changeVisSpeed={this.changeVisSpeed}
+                    visualizationSpeed={this.state.visualizationSpeed}
                     activeAlert={this.state.activeAlert}
                     removeAlert={this.removeAlert}
                 />

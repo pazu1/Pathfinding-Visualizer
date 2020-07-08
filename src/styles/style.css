@@ -11,6 +11,20 @@ body {
     background-color: var(--white);
     font-family: sans-serif;
 }
+input[type=range]::-webkit-slider-thumb {
+    background: var(--accent) !important;
+}
+input[type=range].range-slider {
+    padding: 0px !important;
+}
+/*
+input[type=range]::-moz-range-thumb {
+    background: var(--accent) !important;
+}
+input[type=range]::-ms-thumb {
+    background: var(--accent) !important;
+}
+*/
 
 .itemBar { /* later */
     opacity: 0;
@@ -24,6 +38,7 @@ body {
     flex-direction: column;
     justify-content: space-around;
     background-color: var(--dark);
+    /*padding: 0.05px;*/
 }
 
 .itemButton {
@@ -64,9 +79,14 @@ body {
     padding-bottom: 20px;
 }
 
+.sliderContainer {
+    display: flex;
+    flex-direction: column;
+}
+
 table, .gridBase {
     position: relative;
-    top: 150px;
+    top: 120px;
     border-collapse: collapse;
     margin: auto;
 
@@ -116,10 +136,6 @@ ion-icon {
     -moz-appearance: none;
 }
 
-.gridButton:hover {
-    background: var(--black);
-}
-
 /*
 .popup-overlay {
     background: #000000;
@@ -166,6 +182,7 @@ ion-icon {
 .settingsButton {
     display: flex;
 }
+
 .settingsButton:disabled, select:disabled {
   background-color: #91a3a0;
   color: #666666;
