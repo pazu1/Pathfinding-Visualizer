@@ -5,8 +5,6 @@ import Grid from './Grid'
 import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
 import { sleep, applyStyle } from '../extfunctions'
 
-export const WIDTH = 45
-export const HEIGHT = 35
 const CELLSIZE = 20
 
 class App extends React.Component {
@@ -14,7 +12,6 @@ class App extends React.Component {
     constructor() {
         super()
 
-        // Make grid
         this.grid = []
         this.start = { x: null, y: null }
         this.end = { x: null, y: null } 
@@ -234,20 +231,23 @@ class App extends React.Component {
                 }
             })
             let currentCell = algGrid[current.y][current.x]
-            if (currentCell.type !== CellType.START) { // Mark current as visited 
+
+            if (currentCell.type !== CellType.START && currentCell.type !== CellType.VISITED) { // Mark current as visited
                 currentCell.type = CellType.VISITED 
-                applyStyle(CellStyles[CellType.VISITED], currentCell.ref, (ref) => {
-                    sleep(400).then(() => {
-                        ref.current.style.transform = 'scale(1.0)'
+                if ( this.state.visualizationState === VizState.RUNNING ) { // Running -> run animation
+                    await sleep(Math.abs(this.state.visualizationSpeed-110)) 
+                    applyStyle(CellStyles[CellType.VISITED], currentCell.ref, (ref) => {
+                        sleep(400).then(() => {
+                            ref.current.style.transform = 'scale(1.0)'
+                        })
                     })
-                })
+                } else {
+                    applyStyle(CellStyles[6], currentCell.ref) 
+                }
             }
 
             if (alg === Alg.ASTAR ) {
                 queue.sort(comparator)
-            }
-            if (this.state.visualizationState === VizState.RUNNING) {
-                await sleep(Math.abs(this.state.visualizationSpeed-110))
             }
         }
 

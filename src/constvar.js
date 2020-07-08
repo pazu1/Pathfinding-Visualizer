@@ -26,6 +26,10 @@ export const CellStyles = [
     {
         background: '#f05e54',
         transform: 'scale(1.0)'
+    },
+    {
+        background: '#38ffc7',
+        transform: 'scale(1.0)'
     }
 ]
 
