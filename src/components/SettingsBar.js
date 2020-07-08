@@ -1,35 +1,31 @@
 import React from 'react';
 import Popup from "reactjs-popup"
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
+import RangeSlider from 'react-bootstrap-range-slider';
 
 import { Alg, CellType, VizState, AlertTypes } from '../constvar'
 
-class SettingsBar extends React.Component { // TODO: add reset button and disable settings when algorithm is running
+class SettingsBar extends React.Component { 
 
     render() {
-
-        let runButtonStyle = {
-            background: '#32e0c4'
-        }
-
         let runButtonText = 'Run! '
         let runButtonIcon = 'play-outline'
 
         if (this.props.visualizationState === VizState.RUNNING) { 
-            runButtonStyle.background = '#eee'
             runButtonText = 'Skip visualization'
             runButtonIcon = 'play-forward-outline'
         } else if (this.props.visualizationState === VizState.FINISHED) {
-            runButtonStyle.background = '#eee'
             runButtonText = 'Clear route'
             runButtonIcon = 'refresh-outline'
         }
 
         return (
             <div>
-            <div className='itemBar'>
-                <button
-                className='itemButton'>X</button>
-            </div>
+                <div className='itemBar'>
+                    <button
+                    className='itemButton'>X</button>
+                </div>
+
                 <div className='topBar'>
                 <div>
                     <label>Algorithm: </label>
@@ -45,7 +41,6 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                          <option value={Alg.DFS}>DFS</option>
                     </select>
                 </div>
-
 
                 <Popup
                     trigger={
@@ -76,6 +71,16 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
 
                 <br/>
 
+                    <div className='sliderContainer'>
+                        <label>Visualization speed:</label>
+                        <RangeSlider
+                            min={10}
+                            max={100}
+                            value={this.props.visualizationSpeed}
+                            onChange={(e) => this.props.changeVisSpeed(e.target.value)}
+                        />
+                    </div>
+
                 <button 
                     type='button' 
                     className='settingsButton'
@@ -87,7 +92,7 @@ class SettingsBar extends React.Component { // TODO: add reset button and disabl
                 </button>
 
                 <button 
-                    style={runButtonStyle}
+                    style={this.props.visualizationState !== VizState.INACTIVE ? { background: '#eee' } : null}
                     type='button' 
                     className='settingsButton'
                     onClick={this.props.onClick}
