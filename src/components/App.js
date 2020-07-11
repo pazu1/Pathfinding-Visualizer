@@ -137,6 +137,16 @@ class App extends React.Component {
                 this.grid[prevY][prevX].ref.current.textContent = '‎'  
         }
 
+        // Delete end / start nodes if they were drawn on
+        if (this.end && this.end.x === x && this.end.y === y ) {
+            replaceCell(this.end)
+            this.end = null 
+        } else if (this.start && this.start.x === x && this.start.y === y ) {
+            replaceCell(this.start)
+            this.start = null
+        }
+        
+        // Special case: drawing end or start nodes
         if (itemType ===  CellType.START) { 
             if (this.start) {
                 replaceCell(this.start)
@@ -147,16 +157,7 @@ class App extends React.Component {
                 replaceCell(this.end)
             }
             this.end = {x: x, y: y}
-        } else if (itemType ===  CellType.NONE || itemType === CellType.WALL) { 
-            if (this.start && this.end.x === x && this.end.y === y ) {
-                replaceCell(this.end)
-                this.end = null 
-            }
-            if (this.start && this.start.x === x && this.start.y === y ) {
-                replaceCell(this.start)
-                this.start = null
-            }
-        }
+        } 
 
         this.grid[y][x].type = itemType
         applyStyle(CellStyles[itemType], this.grid[y][x].ref)
