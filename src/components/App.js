@@ -13,8 +13,8 @@ class App extends React.Component {
         super()
 
         this.grid = []
-        this.start = { x: null, y: null }
-        this.end = { x: null, y: null } 
+        this.start = null
+        this.end = null
         this.route = []
 
         this.state = {
@@ -68,7 +68,6 @@ class App extends React.Component {
         this.setState({})
     }
 
-
     changeItem(event) {
         this.setState({item: parseInt(event.target.value)})
     }
@@ -88,10 +87,10 @@ class App extends React.Component {
     onRunButtonClick() { // Or skip animation if clicked and was already running
         let start = this.start
         let end = this.end
-        if (start.x === null) {
+        if (start === null) {
             this.setState({activeAlert: AlertTypes.NOSTART})
             return
-        } else if (end.x === null) {
+        } else if (end === null) {
             this.setState({activeAlert: AlertTypes.NOEND})
             return
         }
@@ -139,23 +138,23 @@ class App extends React.Component {
         }
 
         if (itemType ===  CellType.START) { 
-            if (this.start.x !== null && this.start.y !== null) {
+            if (this.start) {
                 replaceCell(this.start)
             }
             this.start = {x: x, y: y}
         } else if (itemType ===  CellType.END) { 
-            if (this.end.x !== null && this.end.y !== null) {
+            if (this.end) {
                 replaceCell(this.end)
             }
             this.end = {x: x, y: y}
         } else if (itemType ===  CellType.NONE || itemType === CellType.WALL) { 
-            if (this.end.x === x && this.end.y === y ) {
+            if (this.start && this.end.x === x && this.end.y === y ) {
                 replaceCell(this.end)
-                this.end = {x: null, y: null}
+                this.end = null 
             }
-            if (this.start.x === x && this.start.y === y ) {
+            if (this.start && this.start.x === x && this.start.y === y ) {
                 replaceCell(this.start)
-                this.start = {x: null, y: null}
+                this.start = null
             }
         }
 
@@ -320,9 +319,9 @@ class App extends React.Component {
         this.setState(() => {
             this.grid.map((row) => {
                 row = row.map((c) => {
-                    if (c.x === this.start.x && c.y === this.start.y) 
+                    if (this.start && c.x === this.start.x && c.y === this.start.y) 
                         c.type = CellType.START
-                    else if (c.x === this.end.x && c.y === this.end.y) 
+                    else if (this.end && c.x === this.end.x && c.y === this.end.y) 
                         c.type = CellType.END
                     else if (resetAll ||
                     c.type === CellType.VISITED ||
@@ -337,10 +336,14 @@ class App extends React.Component {
             return { visualizationState: VizState.INACTIVE }
         })
         if (resetAll) {
-            this.grid[this.start.y][this.start.x].ref.current.textContent = '‎'  
-            this.grid[this.end.y][this.end.x].ref.current.textContent = '‎'  
-            this.start = {x: null, y: null }
-            this.end = {x: null, y: null }
+            if (this.start) {
+                this.grid[this.start.y][this.start.x].ref.current.textContent = '‎'  
+            }
+            if (this.end) {
+                this.grid[this.end.y][this.end.x].ref.current.textContent = '‎'  
+            }
+            this.start = null
+            this.end = null
         }
             
     }
