@@ -7,7 +7,7 @@ function ItemBarBtn(props) {
         style.display = 'none'
     }
     if (props.disabled) {
-        style.background = '#fff'
+        style.background = '#9c9c9c'
     }
 
 

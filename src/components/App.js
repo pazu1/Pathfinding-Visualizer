@@ -68,8 +68,8 @@ class App extends React.Component {
         this.setState({})
     }
 
-    changeItem(event) {
-        this.setState({item: parseInt(event.target.value)})
+    changeItem(selectedItem) {
+        this.setState({item: selectedItem})
     }
 
     changeAlgorithm(event) {
@@ -371,6 +371,7 @@ class App extends React.Component {
                 <Settings
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
+                    selectedItem={this.state.item}
                     onClick={this.onRunButtonClick}
                     onMazeClick={this.generateMaze}
                     onResetClick={this.clearVisualization}

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 import ItemBarBtn from './ItemBarBtn'
+import { CellType } from '../constvar'
 
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
-    const [selectedItem, setSelectedItem] = useState(1) 
-    
+
     return (
         <div style={ { height: '100%', zIndex:10} }>
             <button 
@@ -26,7 +26,7 @@ function ItemBar(props) {
                 className = 'itemBar'
                 style={ 
                     expanded ? { 
-                        height: '50%', 
+                        height: '20vh', 
                         opacity: 100} 
                     : { 
                         height: '0%', 
@@ -37,32 +37,32 @@ function ItemBar(props) {
                     parentHidden={!expanded}
                     text={'Start node'}
                     color={'#d2ff4a'}
-                    disabled={ selectedItem !== 1 }
-                    onClick={() => {setSelectedItem(1)}}
+                    disabled={ props.selectedItem !== CellType.START }
+                    onClick={() => {props.changeSelectedItem(CellType.START)}}
 
                 />
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'End node'}
                     color={'#fcba03'}
-                    disabled={ selectedItem !== 2 }
-                    onClick={() => {setSelectedItem(2)}}
+                    disabled={ props.selectedItem !== CellType.END }
+                    onClick={() => {props.changeSelectedItem(CellType.END)}}
 
                 />
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'Wall'}
                     color={'#000'}
-                    disabled={ selectedItem !== 3 }
-                    onClick={() => setSelectedItem(3)}
+                    disabled={ props.selectedItem !== CellType.WALL }
+                    onClick={() => props.changeSelectedItem(CellType.WALL)}
 
                 />
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'Eraser'}
                     color={'#fff'}
-                    disabled={ selectedItem !== 4 }
-                    onClick={() => setSelectedItem(4)}
+                    disabled={ props.selectedItem !== CellType.NONE }
+                    onClick={() => props.changeSelectedItem(CellType.NONE)}
 
                 />
             </div>

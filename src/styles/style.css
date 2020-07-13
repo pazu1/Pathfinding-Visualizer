@@ -48,10 +48,13 @@ input[type=range]::-ms-thumb {
 }
 
 .itemBarBtn {
+    outline: none;
     cursor: pointer;
     width: 90%;
+    border: none;
     padding: 1vh;
-    margin-top: 1vh;
+    margin-top: 0.5vh;
+    margin-bottom: 0.5vh;
     text-decoration: none;
     background: var(--black);
     color: var(--white);

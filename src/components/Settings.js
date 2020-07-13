@@ -10,14 +10,14 @@ class Settings extends React.Component {
 
     render() {
         let runButtonText = 'Run! '
-        let runButtonIcon = 'play-outline'
+        let runButtonIcon = 'play-sharp'
 
         if (this.props.visualizationState === VizState.RUNNING) { 
             runButtonText = 'Skip visualization'
-            runButtonIcon = 'play-forward-outline'
+            runButtonIcon = 'play-forward-sharp'
         } else if (this.props.visualizationState === VizState.FINISHED) {
             runButtonText = 'Clear route'
-            runButtonIcon = 'refresh-outline'
+            runButtonIcon = 'refresh-sharp'
         }
 
         return (
@@ -39,34 +39,35 @@ class Settings extends React.Component {
                     </select>
                 </div>
 
-                <Popup
-                    trigger={
-                        <div>
-                            <label>Place item: </label>
-                            <select 
-                                name='mapItems' 
-                                id='mapItems'
-                                onChange={this.props.changeSelectedItem}
-                                disabled={this.props.visualizationState !== VizState.INACTIVE}
-                            >
-                                 <option value={CellType.WALL}>Wall</option>
-                                 <option value={CellType.START}>Start node</option>
-                                 <option value={CellType.END}>End node</option>
-                                 <option value={CellType.NONE}>Erase</option>
-                            </select>
-                        </div>
-                    }
-                    position='bottom center'
-                    closeOnDocumentClick
-                    open={this.props.activeAlert === AlertTypes.NOSTART ||
-                    this.props.activeAlert === AlertTypes.NOEND}
-                    on='none'
-                    onClose={this.props.removeAlert}
-                >
-                    {this.props.activeAlert} 
-                </Popup>
+                {
+                // <Popup
+                //     trigger={
+                //         <div>
+                //             <label>Place item: </label>
+                //             <select 
+                //                 name='mapItems' 
+                //                 id='mapItems'
+                //                 onChange={this.props.changeSelectedItem}
+                //                 disabled={this.props.visualizationState !== VizState.INACTIVE}
+                //             >
+                //                  <option value={CellType.WALL}>Wall</option>
+                //                  <option value={CellType.START}>Start node</option>
+                //                  <option value={CellType.END}>End node</option>
+                //                  <option value={CellType.NONE}>Erase</option>
+                //             </select>
+                //         </div>
+                //     }
+                //     position='bottom center'
+                //     closeOnDocumentClick
+                //     open={this.props.activeAlert === AlertTypes.NOSTART ||
+                //     this.props.activeAlert === AlertTypes.NOEND}
+                //     on='none'
+                //     onClose={this.props.removeAlert}
+                // >
+                //     {this.props.activeAlert} 
+                // </Popup> 
+                }
 
-                <br/>
 
                 <div className='sliderContainer'>
                     <label>Visualization speed:</label>
@@ -93,7 +94,7 @@ class Settings extends React.Component {
                     disabled={this.props.visualizationState === VizState.RUNNING }
                     onClick={() => this.props.onResetClick(true)}
                 >
-                    <ion-icon name='trash-outline'></ion-icon>
+                    <ion-icon name='trash-sharp'></ion-icon>
                     Reset grid
                 </button>
 
@@ -110,7 +111,10 @@ class Settings extends React.Component {
 
             </div>
 
-                <ItemBar/>
+                <ItemBar
+                    changeSelectedItem={ this.props.changeSelectedItem }
+                    selectedItem={ this.props.selectedItem }
+                />
             </div>
         )
     }
