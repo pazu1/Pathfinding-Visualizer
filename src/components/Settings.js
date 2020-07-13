@@ -3,9 +3,10 @@ import Popup from "reactjs-popup"
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
 
+import ItemBar from './ItemBar'
 import { Alg, CellType, VizState, AlertTypes } from '../constvar'
 
-class SettingsBar extends React.Component { 
+class Settings extends React.Component { 
 
     render() {
         let runButtonText = 'Run! '
@@ -20,11 +21,7 @@ class SettingsBar extends React.Component {
         }
 
         return (
-            <div>
-                <div className='itemBar'>
-                    <button
-                    className='itemButton'>X</button>
-                </div>
+            <div className='stngsUiWrapper'>
 
                 <div className='topBar'>
                 <div>
@@ -112,9 +109,11 @@ class SettingsBar extends React.Component {
                 </button>
 
             </div>
+
+                <ItemBar/>
             </div>
         )
     }
 }
 
-export default SettingsBar
+export default Settings

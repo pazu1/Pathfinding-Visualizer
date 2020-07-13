@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SettingsBar from './SettingsBar'
+import Settings from './Settings'
 import Grid from './Grid'
 import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
 import { sleep, applyStyle } from '../extfunctions'
@@ -49,7 +49,7 @@ class App extends React.Component {
     }
 
     createGrid() {
-        let rows = Math.floor((window.innerHeight*0.8) / CELLSIZE)
+        let rows = Math.floor((window.innerHeight*0.7) / CELLSIZE)
         let cols = Math.floor((window.innerWidth*0.8) / CELLSIZE)
         let newGrid = []
         for (let y=0;y<rows;y++) {
@@ -368,7 +368,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <SettingsBar
+                <Settings
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     changeSelectedItem={this.changeItem}
                     onClick={this.onRunButtonClick}
