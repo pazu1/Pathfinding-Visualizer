@@ -2,6 +2,7 @@ import React from 'react'
 
 import Settings from './Settings'
 import Grid from './Grid'
+import ItemBar from './ItemBar'
 import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
 import { sleep, applyStyle } from '../extfunctions'
 
@@ -19,7 +20,7 @@ class App extends React.Component {
 
         this.state = {
             algorithm: Alg.ASTAR,
-            item: CellType.WALL,
+            item: CellType.START,
             activeAlert: null,
             visualizationState: VizState.INACTIVE,
             visualizationSpeed: 90
@@ -50,7 +51,7 @@ class App extends React.Component {
 
     createGrid() {
         let rows = Math.floor((window.innerHeight*0.7) / CELLSIZE)
-        let cols = Math.floor((window.innerWidth*0.8) / CELLSIZE)
+        let cols = Math.floor((window.innerWidth*0.65) / CELLSIZE)
         let newGrid = []
         for (let y=0;y<rows;y++) {
             newGrid.push([])
@@ -146,7 +147,7 @@ class App extends React.Component {
             this.start = null
         }
         
-        // Special case: drawing end or start nodes
+        // Special case: drawing end- or start-nodes
         if (itemType ===  CellType.START) { 
             if (this.start) {
                 replaceCell(this.start)
@@ -370,8 +371,6 @@ class App extends React.Component {
             <div>
                 <Settings
                     changeSelectedAlgorithm={this.changeAlgorithm}
-                    changeSelectedItem={this.changeItem}
-                    selectedItem={this.state.item}
                     onClick={this.onRunButtonClick}
                     onMazeClick={this.generateMaze}
                     onResetClick={this.clearVisualization}
@@ -381,12 +380,28 @@ class App extends React.Component {
                     activeAlert={this.state.activeAlert}
                     removeAlert={this.removeAlert}
                 />
-                <Grid
-                    updateCell={this.drawOnGrid}
-                    selectedItem={this.state.item}
-                    grid={this.grid}
-                    disableDrawing={this.state.visualizationState !== VizState.INACTIVE}
-                />
+                <span 
+                    style = {{ 
+                        width: '100%', 
+                        height: '100%', 
+                        display: 'flex' , 
+                        flexDirection: 'row' , 
+                        topMargin: '100', 
+                        position: 'fixed',
+                        padding: '0px 0px'
+                    }}>
+                    <ItemBar
+                        changeSelectedItem={this.changeItem}
+                        selectedItem={this.state.item}
+                        hidden={this.state.visualizationState != VizState.INACTIVE}
+                    />
+                    <Grid
+                        updateCell={this.drawOnGrid}
+                        selectedItem={this.state.item}
+                        grid={this.grid}
+                        disableDrawing={this.state.visualizationState !== VizState.INACTIVE}
+                    />
+                </span>
             </div>
         )
     }

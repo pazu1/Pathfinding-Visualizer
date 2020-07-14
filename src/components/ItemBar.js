@@ -5,15 +5,16 @@ import { CellType } from '../constvar'
 
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
+    let hide = !expanded || props.hidden
 
     return (
         <div style={ { height: '100%', zIndex:10} }>
             <button 
                 className = 'itemBarToggle'
                 onClick={() => setExpanded(!expanded)}>
-                Tools
+                Items
                 <ion-icon 
-                    name={ !expanded ? 'caret-down-outline' : 
+                    name={ hide ? 'caret-down-outline' : 
                             'caret-up-outline' }
                     style={ { 
                         paddingLeft: 20,
@@ -25,7 +26,7 @@ function ItemBar(props) {
             <div 
                 className = 'itemBar'
                 style={ 
-                    expanded ? { 
+                    !hide ? { 
                         height: '20vh', 
                         opacity: 100} 
                     : { 

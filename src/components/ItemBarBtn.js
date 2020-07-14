@@ -7,7 +7,8 @@ function ItemBarBtn(props) {
         style.display = 'none'
     }
     if (props.disabled) {
-        style.background = '#9c9c9c'
+        style.boxShadow = 'none'
+        style.border = '2px solid transparent'
     }
 
 
@@ -17,14 +18,12 @@ function ItemBarBtn(props) {
             style={ style }
             onClick={ props.onClick }
         >
-            <span 
-                style={
-                    props.color ? { color: props.color } : {color: '#f00'}
-                }
+            <span
+                style={{ color: props.color }}
             >
-                { props.symbol ? props.symbol : '■ ' }
+                { '■ ' }
             </span>
-            { props.text ? props.text : 'item' }
+            { props.text ?<p id='itemBarText'>{props.text}</p> : 'item' }
         </button>
     )
 }

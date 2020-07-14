@@ -21,9 +21,7 @@ class Settings extends React.Component {
         }
 
         return (
-            <div className='stngsUiWrapper'>
-
-                <div className='topBar'>
+            <div className='topBar'>
                 <div>
                     <label>Algorithm: </label>
                     <select 
@@ -109,12 +107,6 @@ class Settings extends React.Component {
                     {runButtonText}
                 </button>
 
-            </div>
-
-                <ItemBar
-                    changeSelectedItem={ this.props.changeSelectedItem }
-                    selectedItem={ this.props.selectedItem }
-                />
             </div>
         )
     }
