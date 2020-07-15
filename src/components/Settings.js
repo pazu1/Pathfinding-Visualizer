@@ -1,10 +1,8 @@
 import React from 'react';
-import Popup from "reactjs-popup"
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
 
-import ItemBar from './ItemBar'
-import { Alg, CellType, VizState, AlertTypes } from '../constvar'
+import { Alg, VizState } from '../constvar'
 
 class Settings extends React.Component { 
 

@@ -85,7 +85,7 @@ class App extends React.Component {
         this.setState({ visualizationSpeed: value })
     }
 
-    onRunButtonClick() { // Or skip animation if clicked and was already running
+    onRunButtonClick() { 
         let start = this.start
         let end = this.end
         if (start === null) {
@@ -138,7 +138,7 @@ class App extends React.Component {
                 this.grid[prevY][prevX].ref.current.textContent = '‎'  
         }
 
-        // Delete end / start nodes if they were drawn on
+        // Delete end- / start-nodes if they were drawn on
         if (this.end && this.end.x === x && this.end.y === y ) {
             replaceCell(this.end)
             this.end = null 
@@ -165,6 +165,7 @@ class App extends React.Component {
     }
 
     generateMaze() { // Prim's Algorithm
+        this.clearVisualization()
         this.grid.forEach(row => {
             row.forEach(cell => {
                 cell.type = CellType.WALL
@@ -393,7 +394,7 @@ class App extends React.Component {
                     <ItemBar
                         changeSelectedItem={this.changeItem}
                         selectedItem={this.state.item}
-                        hidden={this.state.visualizationState != VizState.INACTIVE}
+                        hidden={this.state.visualizationState !== VizState.INACTIVE}
                     />
                     <Grid
                         updateCell={this.drawOnGrid}
