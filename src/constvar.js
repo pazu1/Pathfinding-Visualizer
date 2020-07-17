@@ -57,8 +57,7 @@ export const VizState = {
 
 export const AlertTypes = {
     NOSTART: 'Please add a start node.',
-    NOEND: 'Please add an end node.',
-    NOROUTE: 'Route was not found'
+    NOEND: 'Please add an end node.'
 }
 
 export const Adjacent = [
@@ -67,3 +66,4 @@ export const Adjacent = [
     [1,0],
     [0,-1]
 ]
+

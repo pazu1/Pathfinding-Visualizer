@@ -379,7 +379,6 @@ class App extends React.Component {
                     changeVisSpeed={this.changeVisSpeed}
                     visualizationSpeed={this.state.visualizationSpeed}
                     activeAlert={this.state.activeAlert}
-                    removeAlert={this.removeAlert}
                 />
                 <span 
                     style = {{ 
@@ -395,6 +394,8 @@ class App extends React.Component {
                         changeSelectedItem={this.changeItem}
                         selectedItem={this.state.item}
                         hidden={this.state.visualizationState !== VizState.INACTIVE}
+                        activeAlert={this.state.activeAlert}
+                        removeAlert={this.removeAlert}
                     />
                     <Grid
                         updateCell={this.drawOnGrid}

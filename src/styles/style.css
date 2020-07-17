@@ -1,6 +1,7 @@
 :root {
     --white: #eee;
     --accent: #32e0c4;
+    --accent2: #fcba03;
     --dark: #393e46;
     --black: #222831;
     --grid: #9c9c9c;
@@ -204,7 +205,7 @@ ion-icon {
     background: var(--white) !important;
 }
 
-.settingsButton, select {
+.settingsButton, .resetButton, select {
     outline: none;
     cursor: pointer;
     border: none;
@@ -223,16 +224,22 @@ ion-icon {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
-.settingsButton {
+
+.resetButton {
+    background: var(--accent2)
+}
+
+.settingsButton, .resetButton {
     display: flex;
 }
 
-.settingsButton:disabled, select:disabled {
+.settingsButton:disabled, .resetButton:disabled, select:disabled {
   background-color: #91a3a0;
   color: #666666;
 }
 
 .settingsButton:hover:enabled,
+.resetButton:hover:enabled,
 select:hover:enabled,
 .settingsButton:active {
     background: var(--white);

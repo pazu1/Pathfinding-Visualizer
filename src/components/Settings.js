@@ -35,36 +35,6 @@ class Settings extends React.Component {
                     </select>
                 </div>
 
-                {
-                // <Popup
-                //     trigger={
-                //         <div>
-                //             <label>Place item: </label>
-                //             <select 
-                //                 name='mapItems' 
-                //                 id='mapItems'
-                //                 onChange={this.props.changeSelectedItem}
-                //                 disabled={this.props.visualizationState !== VizState.INACTIVE}
-                //             >
-                //                  <option value={CellType.WALL}>Wall</option>
-                //                  <option value={CellType.START}>Start node</option>
-                //                  <option value={CellType.END}>End node</option>
-                //                  <option value={CellType.NONE}>Erase</option>
-                //             </select>
-                //         </div>
-                //     }
-                //     position='bottom center'
-                //     closeOnDocumentClick
-                //     open={this.props.activeAlert === AlertTypes.NOSTART ||
-                //     this.props.activeAlert === AlertTypes.NOEND}
-                //     on='none'
-                //     onClose={this.props.removeAlert}
-                // >
-                //     {this.props.activeAlert} 
-                // </Popup> 
-                }
-
-
                 <div className='sliderContainer'>
                     <label>Visualization speed:</label>
                     <RangeSlider
@@ -86,7 +56,7 @@ class Settings extends React.Component {
 
                 <button 
                     type='button' 
-                    className='settingsButton'
+                    className='resetButton'
                     disabled={this.props.visualizationState === VizState.RUNNING }
                     onClick={() => this.props.onResetClick(true)}
                 >

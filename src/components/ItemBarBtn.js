@@ -1,4 +1,7 @@
-import React from 'react';
+import React from 'react'
+import Popup from 'reactjs-popup'
+
+import AlertTypes from '../constvar'
 
 function ItemBarBtn(props) {
     
@@ -13,18 +16,28 @@ function ItemBarBtn(props) {
 
 
     return (
-        <button
-            className='itemBarBtn'
-            style={ style }
-            onClick={ props.onClick }
-        >
-            <span
-                style={{ color: props.color }}
+        <Popup trigger={
+            <button
+                className='itemBarBtn'
+                style={ style }
+                onClick={ props.onClick }
             >
-                { '■ ' }
-            </span>
-            { props.text ?<p id='itemBarText'>{props.text}</p> : 'item' }
-        </button>
+                <span
+                    style={{ color: props.color }}
+                >
+                    { '■ ' }
+                </span>
+                { props.text ?<p id='itemBarText'>{props.text}</p> : 'item' }
+            </button>
+            }
+            position='right center'
+            closeOnDocumentClick
+            open={props.showTip}
+            on='none'
+            onClose={props.onTipClosed}
+        >
+            {props.tipText}
+        </Popup>
     )
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import ItemBarBtn from './ItemBarBtn'
-import { CellType } from '../constvar'
+import { CellType, AlertTypes } from '../constvar'
 
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
@@ -11,7 +11,9 @@ function ItemBar(props) {
         <div style={ { height: '100%', zIndex:10} }>
             <button 
                 className = 'itemBarToggle'
-                onClick={() => setExpanded(!expanded)}>
+                onClick={() => {
+                    if (!props.hidden) setExpanded(!expanded)
+                }}>
                 Items
                 <ion-icon 
                     name={ hide ? 'caret-down-outline' : 
@@ -40,6 +42,9 @@ function ItemBar(props) {
                     color={'#d2ff4a'}
                     disabled={ props.selectedItem !== CellType.START }
                     onClick={() => {props.changeSelectedItem(CellType.START)}}
+                    showTip={props.activeAlert === AlertTypes.NOSTART}
+                    tipText={props.activeAlert} 
+                    onTipClosed={props.removeAlert}
 
                 />
                 <ItemBarBtn 
@@ -48,6 +53,9 @@ function ItemBar(props) {
                     color={'#fcba03'}
                     disabled={ props.selectedItem !== CellType.END }
                     onClick={() => {props.changeSelectedItem(CellType.END)}}
+                    showTip={props.activeAlert === AlertTypes.NOEND}
+                    tipText={props.activeAlert} 
+                    onTipClosed={props.removeAlert}
 
                 />
                 <ItemBarBtn 
