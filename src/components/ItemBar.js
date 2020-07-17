@@ -8,9 +8,9 @@ import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup'
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
     let hide = !expanded || props.hidden
-    let dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
+    let dropDownIcon = <MdArrowDropup fontSize='25px' className='ionDropdown'/>
     if (hide) {
-        dropDownIcon = <MdArrowDropup fontSize='25px' className='ionDropdown'/>
+        dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
     }
 
     return (
@@ -20,10 +20,10 @@ function ItemBar(props) {
                 onClick={() => {
                     if (!props.hidden) setExpanded(!expanded)
                 }}>
-                <span style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', verticalAlign: 'bottom'}}>
-                    Items
+                <div style={{textAlign: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                    <span>Items</span> <br/>
                     { dropDownIcon }
-                </span>
+                </div>
             </button>
             <div 
                 className = 'itemBar'
