@@ -157,6 +157,14 @@ ion-icon {
     padding-right: 5px;
 }
 
+.ionIcon {
+    padding-right: 5px;
+}
+
+.ionDropdown {
+    padding-left: 5px;
+}
+
 .gridButton {
     outline: none;
     cursor: pointer;

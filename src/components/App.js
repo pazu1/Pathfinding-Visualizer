@@ -134,7 +134,6 @@ class App extends React.Component {
                 let prevY = startOrEnd.y
                 this.grid[prevY][prevX].type = CellType.NONE
                 applyStyle(CellStyles[CellType.NONE], this.grid[prevY][prevX].ref)
-                this.grid[prevY][prevX].ref.current.textContent = '‎'  
         }
 
         // Delete end- / start-nodes if they were drawn on
@@ -338,12 +337,6 @@ class App extends React.Component {
             return { visualizationState: VizState.INACTIVE }
         })
         if (resetAll) {
-            if (this.start) {
-                this.grid[this.start.y][this.start.x].ref.current.textContent = '‎'  
-            }
-            if (this.end) {
-                this.grid[this.end.y][this.end.x].ref.current.textContent = '‎'  
-            }
             this.start = null
             this.end = null
         }

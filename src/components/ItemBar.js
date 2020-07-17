@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 
 import ItemBarBtn from './ItemBarBtn'
 import { CellType, AlertTypes } from '../constvar'
+import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown'
+import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup'
 
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
     let hide = !expanded || props.hidden
+    let dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
+    if (hide) {
+        dropDownIcon = <MdArrowDropup fontSize='25px' className='ionDropdown'/>
+    }
 
     return (
         <div style={ { height: '100%', zIndex:10} }>
@@ -14,16 +20,10 @@ function ItemBar(props) {
                 onClick={() => {
                     if (!props.hidden) setExpanded(!expanded)
                 }}>
-                Items
-                <ion-icon 
-                    name={ hide ? 'caret-down-outline' : 
-                            'caret-up-outline' }
-                    style={ { 
-                        paddingLeft: 20,
-                        marginBottom: -4
-                    } }
-                >
-                </ion-icon>
+                <span style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', verticalAlign: 'bottom'}}>
+                    Items
+                    { dropDownIcon }
+                </span>
             </button>
             <div 
                 className = 'itemBar'
@@ -39,7 +39,7 @@ function ItemBar(props) {
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'Start node'}
-                    color={'#d2ff4a'}
+                    color={'#00ff37'}
                     disabled={ props.selectedItem !== CellType.START }
                     onClick={() => {props.changeSelectedItem(CellType.START)}}
                     showTip={props.activeAlert === AlertTypes.NOSTART}
@@ -50,7 +50,7 @@ function ItemBar(props) {
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'End node'}
-                    color={'#fcba03'}
+                    color={'#a200ff'}
                     disabled={ props.selectedItem !== CellType.END }
                     onClick={() => {props.changeSelectedItem(CellType.END)}}
                     showTip={props.activeAlert === AlertTypes.NOEND}

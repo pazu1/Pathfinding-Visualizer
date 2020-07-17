@@ -1,6 +1,10 @@
 import React from 'react';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
+import MdTrash from 'react-ionicons/lib/MdTrash'
+import MdPlay from 'react-ionicons/lib/MdPlay'
+import MdFastForward from 'react-ionicons/lib/MdFastforward'
+import MdRefresh from 'react-ionicons/lib/MdRefresh'
 
 import { Alg, VizState } from '../constvar'
 
@@ -8,14 +12,14 @@ class Settings extends React.Component {
 
     render() {
         let runButtonText = 'Run! '
-        let runButtonIcon = 'play-sharp'
+        let runButtonIcon = <MdPlay fontSize='17px' className='ionIcon'/>
 
         if (this.props.visualizationState === VizState.RUNNING) { 
             runButtonText = 'Skip visualization'
-            runButtonIcon = 'play-forward-sharp'
+            runButtonIcon = <MdFastForward fontSize='17px' className='ionIcon'/>
         } else if (this.props.visualizationState === VizState.FINISHED) {
             runButtonText = 'Clear route'
-            runButtonIcon = 'refresh-sharp'
+            runButtonIcon = <MdRefresh fontSize='17px' className='ionIcon'/>
         }
 
         return (
@@ -60,7 +64,7 @@ class Settings extends React.Component {
                     disabled={this.props.visualizationState === VizState.RUNNING }
                     onClick={() => this.props.onResetClick(true)}
                 >
-                    <ion-icon name='trash-sharp'></ion-icon>
+                    <MdTrash fontSize='17px' className='ionIcon'/>
                     Reset grid
                 </button>
 
@@ -70,8 +74,7 @@ class Settings extends React.Component {
                     className='settingsButton'
                     onClick={this.props.onClick}
                 >
-                    <ion-icon name={ runButtonIcon }
-                    ></ion-icon>
+                    {runButtonIcon}
                     {runButtonText}
                 </button>
 
