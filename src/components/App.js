@@ -4,7 +4,7 @@ import Settings from './Settings'
 import Grid from './Grid'
 import ItemBar from './ItemBar'
 import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
-import { sleep, applyStyle } from '../extfunctions'
+import { sleep, asyncForEach, applyStyle } from '../extfunctions'
 
 const CELLSIZE = 20
 
@@ -113,19 +113,18 @@ class App extends React.Component {
         }
     }
 
-    updateRoute(foundRoute) {
-        this.setState(() => {
-            if (foundRoute) {
-                this.route.map( coord => {
-                    applyStyle(CellStyles[CellType.ROUTE], this.grid[coord.y][coord.x].ref)
-                    return this.grid[coord.y][coord.x].type = CellType.ROUTE
-                })
-                return {
-                    visualizationState: VizState.RUNNING
-                }
-            }
-            return {}
-        }, () => {this.setState({visualizationState: VizState.FINISHED})})
+    async updateRoute() { // make part of visualization TODO
+        this.route.reverse()
+        asyncForEach(this.route, async (coord) => {
+            if (this.state.visualizationState === VizState.RUNNING)
+                await sleep(Math.abs(this.state.visualizationSpeed-110)) 
+            this.grid[coord.y][coord.x].type = CellType.ROUTE
+            applyStyle(CellStyles[CellType.ROUTE], this.grid[coord.y][coord.x].ref)
+
+        }).then(() => {
+
+            this.setState({visualizationState: VizState.FINISHED})
+        })
     }
 
     drawOnGrid(x, y, itemType = this.state.item) { 
@@ -305,7 +304,7 @@ class App extends React.Component {
         if (this.state.visualizationState === VizState.RUNNING) {
             await sleep(100)
         }
-        this.updateRoute(foundRoute)
+        this.updateRoute()
     }
 
     async DFS(start, end) {

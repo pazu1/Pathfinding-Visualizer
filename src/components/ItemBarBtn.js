@@ -1,8 +1,6 @@
 import React from 'react'
 import Popup from 'reactjs-popup'
 
-import AlertTypes from '../constvar'
-
 function ItemBarBtn(props) {
     
     let style = { display: 'table-row'}
