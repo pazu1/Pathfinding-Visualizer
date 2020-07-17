@@ -39,7 +39,7 @@ function ItemBar(props) {
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'Start node'}
-                    color={'#d2ff4a'}
+                    color={'#00ff37'}
                     disabled={ props.selectedItem !== CellType.START }
                     onClick={() => {props.changeSelectedItem(CellType.START)}}
                     showTip={props.activeAlert === AlertTypes.NOSTART}
@@ -50,7 +50,7 @@ function ItemBar(props) {
                 <ItemBarBtn 
                     parentHidden={!expanded}
                     text={'End node'}
-                    color={'#fcba03'}
+                    color={'#a200ff'}
                     disabled={ props.selectedItem !== CellType.END }
                     onClick={() => {props.changeSelectedItem(CellType.END)}}
                     showTip={props.activeAlert === AlertTypes.NOEND}

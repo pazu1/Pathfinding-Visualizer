@@ -10,12 +10,12 @@ export const CellStyles = [
         transform: 'scale(1.0)'
     },
     {
-        background: '#d2ff4a',
+        background: '#00ff37',
         transform: 'scale(1.0)',
         textContent: 's'
     },
     {
-        background: '#fcba03',
+        background: '#a200ff',
         transform: 'scale(1.0)',
         textContent: 'e'
     },
