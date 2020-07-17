@@ -158,7 +158,8 @@ td {
 }
 
 .ionDropdown {
-    padding-left: 10px;
+    padding-left: 18px;
+    margin: -8px;
 }
 
 .gridButton {

@@ -20,10 +20,8 @@ function ItemBar(props) {
                 onClick={() => {
                     if (!props.hidden) setExpanded(!expanded)
                 }}>
-                <div style={{textAlign: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                    <span>Items</span> <br/>
+                    Items
                     { dropDownIcon }
-                </div>
             </button>
             <div 
                 className = 'itemBar'
