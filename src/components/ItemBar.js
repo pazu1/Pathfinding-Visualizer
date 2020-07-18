@@ -14,7 +14,7 @@ function ItemBar(props) {
     }
 
     return (
-        <div style={ { height: '100%', zIndex:10} }>
+        <div className='itemBarContainer'>
             <button 
                 className = 'itemBarToggle'
                 onClick={() => {

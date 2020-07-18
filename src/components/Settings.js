@@ -8,7 +8,46 @@ import MdRefresh from 'react-ionicons/lib/MdRefresh'
 
 import { Alg, VizState } from '../constvar'
 
+const MOBILE_WIDTH = 800
+
 class Settings extends React.Component { 
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+        this.onResize = this.onResize.bind(this)
+    }
+
+    onResize() {
+        window.requestAnimationFrame(() => {
+            this.setState(() => {
+                let mobile = false
+                let width = window.innerWidth
+                if (width < MOBILE_WIDTH) mobile = true
+
+                return { 
+                    width: width,
+                    mobile: mobile
+                }
+            })
+        })
+        console.log(this.state.mobile)
+    }
+
+    componentWillMount() {
+        this.setState({
+            width: window.innerWidth,
+            mobile: window.innerWidth < MOBILE_WIDTH 
+        })
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.onResize)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.onResize)
+    }
 
     render() {
         let runButtonText = 'Run! '
@@ -23,7 +62,7 @@ class Settings extends React.Component {
         }
 
         return (
-            <div className='topBar'>
+            <div className={ this.state.mobile ? 'topBarMobile' : 'topBar' } >
                 <div>
                     <label>Algorithm: </label>
                     <select 
@@ -81,7 +120,6 @@ class Settings extends React.Component {
                     {runButtonIcon}
                     {runButtonText}
                 </button>
-
             </div>
         )
     }
