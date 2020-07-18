@@ -64,7 +64,11 @@ class Settings extends React.Component {
                     disabled={this.props.visualizationState === VizState.RUNNING }
                     onClick={() => this.props.onResetClick(true)}
                 >
-                    <MdTrash fontSize='17px' className='ionIcon'/>
+                    <MdTrash 
+                        fontSize='17px' 
+                        className='ionIcon' 
+                        color={this.props.visualizationState === VizState.RUNNING ? '#666' : null}
+                    />
                     Reset grid
                 </button>
 

@@ -113,7 +113,7 @@ class App extends React.Component {
         }
     }
 
-    async updateRoute() { // make part of visualization TODO
+    async updateRoute() { 
         this.route.reverse()
         asyncForEach(this.route, async (coord) => {
             if (this.state.visualizationState === VizState.RUNNING)
