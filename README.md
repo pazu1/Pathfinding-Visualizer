@@ -2,7 +2,7 @@
 
 Web-app for visualizing pathfinding algorithms.
 
-Made with React. <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/320px-React-icon.svg.png" width="32">
+Made with React. <img src="favicon.ico" width="20">
 
 ## Install
 
