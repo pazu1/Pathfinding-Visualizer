@@ -26,13 +26,12 @@ function ItemBar(props) {
             <div 
                 className = 'itemBar'
                 style={ 
-                    !hide ? { 
-                        height: '20vh', 
-                        opacity: 100} 
+                    !hide ? null 
                     : { 
                         height: '0%', 
                         opacity: 0
-                }}
+                    }
+                }
                     >
                 <ItemBarBtn 
                     parentHidden={!expanded}
