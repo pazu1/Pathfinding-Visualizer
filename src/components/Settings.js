@@ -60,7 +60,9 @@ class Settings extends React.Component {
 
         if (this.props.visualizationState === VizState.RUNNING) { 
             runButtonText = 'Skip visualization'
-            styleNormal = { opacity: 0.5 }
+            if (this.state.mobile) {
+                styleNormal = { opacity: 0.5 }
+            }
             runButtonIcon = <MdFastForward fontSize='17px' className='ionIcon'/>
         } else if (this.props.visualizationState === VizState.FINISHED) {
             runButtonText = 'Clear route'
