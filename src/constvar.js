@@ -33,9 +33,8 @@ export const CellStyles = [
 
 export const Alg = {
     ASTAR: 1,
-    DIJKSTRA: 2,
-    BFS: 3,
-    DFS: 4
+    BFS: 2,
+    DFS: 3
 }
 
 export const CellType = {

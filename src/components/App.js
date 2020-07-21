@@ -40,8 +40,7 @@ class App extends React.Component {
         this.algFunctions = {
             1: this.aStarPlus.bind(this),
             2: this.BFS.bind(this),
-            3: this.BFS.bind(this),
-            4: this.DFS.bind(this)
+            3: this.DFS.bind(this)
         }
     }
 
@@ -58,7 +57,6 @@ class App extends React.Component {
             for (let x=0;x<cols;x++) {
                 newGrid[y].push({
                     type: CellType.NONE,
-                    weight: 0, // TODO
                     x: x,
                     y: y,
                     ref: null

@@ -106,7 +106,6 @@ class Settings extends React.Component {
                             disabled={this.props.visualizationState !== VizState.INACTIVE}
                         >
                              <option value={Alg.ASTAR}>A*</option>
-                             <option value={Alg.DIJKSTRA}>Dijkstra</option>
                              <option value={Alg.BFS}>BFS</option>
                              <option value={Alg.DFS}>DFS</option>
                         </select>

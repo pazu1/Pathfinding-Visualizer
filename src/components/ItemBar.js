@@ -30,8 +30,7 @@ function ItemBar(props) {
                     : { 
                         height: '0%', 
                         opacity: 0
-                    }
-                }
+                    }}
                     >
                 <ItemBarBtn 
                     parentHidden={!expanded}
