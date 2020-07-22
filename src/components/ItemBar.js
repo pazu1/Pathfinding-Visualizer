@@ -4,6 +4,7 @@ import ItemBarBtn from './ItemBarBtn'
 import { CellType, AlertTypes } from '../constvar'
 import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown'
 import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup'
+import {useSpring, animated, config} from 'react-spring'
 
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
@@ -11,6 +12,17 @@ function ItemBar(props) {
     let dropDownIcon = <MdArrowDropup fontSize='25px' className='ionDropdown'/>
     if (hide) {
         dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
+    }
+
+    const sProps = useSpring({
+        height: !hide ? 330 : 0,
+        opacity: !hide ? 1 : 0,
+        config: key => (key === 'height' ? config.wobbly : config.stiff)
+    })
+    
+    const aStyle = {
+        height: sProps.height,
+        opacity: sProps.opacity
     }
 
     return (
@@ -23,14 +35,9 @@ function ItemBar(props) {
                     Items
                     { dropDownIcon }
             </button>
-            <div 
+            <animated.div 
                 className = 'itemBar'
-                style={ 
-                    !hide ? null 
-                    : { 
-                        height: '0%', 
-                        opacity: 0
-                    }}
+                style={aStyle}
                     >
                 <ItemBarBtn 
                     parentHidden={!expanded}
@@ -70,7 +77,7 @@ function ItemBar(props) {
                     onClick={() => props.changeSelectedItem(CellType.NONE)}
 
                 />
-            </div>
+            </animated.div>
         </div>
     )
 }

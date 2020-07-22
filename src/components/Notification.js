@@ -15,12 +15,12 @@ function Notification (props) {
     const sProps = useSpring({
         height: props.active ? 50 : 0,
         opacity: props.active ? 1 : 0,
-        bottom: props.active ? 60 : 0,
+        bottom: props.active ? 30 : 0,
     })
 
     const prevWasAlert = usePrevious(props.isAlert)
 
-    let style = {
+    const style = {
         height: sProps.height,
         opacity: sProps.opacity,
         background: props.isAlert && prevWasAlert ? ALERTCOLOR : null,
@@ -34,7 +34,6 @@ function Notification (props) {
             <p>{props.active ? props.text : null}</p>
         </animated.div>
     )
-
 }
 
 export default Notification
