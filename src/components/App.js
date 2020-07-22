@@ -3,6 +3,7 @@ import React from 'react'
 import Settings from './Settings'
 import Grid from './Grid'
 import ItemBar from './ItemBar'
+import Notification from './Notification'
 import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
 import { sleep, asyncForEach, applyStyle } from '../extfunctions'
 
@@ -35,7 +36,7 @@ class App extends React.Component {
         this.removeAlert = this.removeAlert.bind(this)
         this.changeVisSpeed = this.changeVisSpeed.bind(this)
         this.createGrid = this.createGrid.bind(this)
-        this.generateMaze = this.generateMaze.bind(this)
+        this.generateMazeSimple = this.generateMazeSimple.bind(this)
 
         this.algFunctions = {
             1: this.aStarPlus.bind(this),
@@ -160,7 +161,7 @@ class App extends React.Component {
         applyStyle(CellStyles[itemType], this.grid[y][x].ref)
     }
 
-    generateMaze() { // Prim's Algorithm
+    generateMazeSimple() { // Prim's Algorithm
         this.clearVisualization()
         this.grid.forEach(row => {
             row.forEach(cell => {
@@ -360,10 +361,19 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <Notification
+                    active={this.state.visualizationState === VizState.FINISHED} // vis state = finished
+                    isAlert={!this.route.length}
+                    text={ 
+                        this.route.length ? 
+                        `Found path of length ${this.route.length}.`
+                        : 'Path not found!'
+                    }
+                />
                 <Settings
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     onClick={this.onRunButtonClick}
-                    onMazeClick={this.generateMaze}
+                    onMazeClick={this.generateMazeSimple}
                     onResetClick={this.clearVisualization}
                     visualizationState={this.state.visualizationState}
                     changeVisSpeed={this.changeVisSpeed}

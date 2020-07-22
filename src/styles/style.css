@@ -2,6 +2,7 @@
     --white: #eee;
     --accent: #32e0c4;
     --accent2: #fcba03;
+    --accent3: #87d93b;
     --dark: #393e46;
     --black: #222831;
     --grid: #9c9c9c;
@@ -26,6 +27,32 @@ input[type=range]::-ms-thumb {
     background: var(--accent) !important;
 }
 */
+
+.notification {
+    position: fixed;
+    right: 3vw;
+    display: table-cell;
+    width: 260px;
+    border: none;
+    border-radius: 2px;
+    text-align: center;
+    font-size: 1rem;
+    background: var(--accent3);
+    -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 2px 5px rgba(0,0,0,0);
+    box-shadow: 0px 10px 13px -7px #000000, 5px 5px 2px 5px rgba(0,0,0,0);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
 .itemBarContainer {
     z-index: 10;
