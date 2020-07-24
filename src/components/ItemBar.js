@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 import ItemBarBtn from './ItemBarBtn'
 import { CellType, AlertTypes } from '../constvar'
 import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown'
 import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup'
-import {useSpring, animated, config} from 'react-spring'
+import { useSpring, animated, config } from 'react-spring'
 
 function ItemBar(props) {
     const [expanded, setExpanded] = useState(true) 
@@ -40,9 +40,8 @@ function ItemBar(props) {
                 style={aStyle}
                     >
                 <ItemBarBtn 
-                    parentHidden={!expanded}
                     text={'Start node'}
-                    color={'#00ff37'}
+                    color={'#36bf00'}
                     disabled={ props.selectedItem !== CellType.START }
                     onClick={() => {props.changeSelectedItem(CellType.START)}}
                     showTip={props.activeAlert === AlertTypes.NOSTART}
@@ -51,7 +50,6 @@ function ItemBar(props) {
 
                 />
                 <ItemBarBtn 
-                    parentHidden={!expanded}
                     text={'End node'}
                     color={'#a200ff'}
                     disabled={ props.selectedItem !== CellType.END }
@@ -62,7 +60,6 @@ function ItemBar(props) {
 
                 />
                 <ItemBarBtn 
-                    parentHidden={!expanded}
                     text={'Wall'}
                     color={'#000'}
                     disabled={ props.selectedItem !== CellType.WALL }
@@ -70,7 +67,6 @@ function ItemBar(props) {
 
                 />
                 <ItemBarBtn 
-                    parentHidden={!expanded}
                     text={'Eraser'}
                     color={'#fff'}
                     disabled={ props.selectedItem !== CellType.NONE }

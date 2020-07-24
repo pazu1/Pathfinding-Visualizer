@@ -175,7 +175,18 @@ input[type=range]::-ms-thumb {
     border-spacing: 19px 19px;
     justify-content: space-between;
     background-color: var(--black);
+}
 
+.mobileAlgSelect {
+    position: fixed;
+    bottom: 1vh;
+    left: 1vw;
+}
+
+.mobileRunButton {
+    position: fixed;
+    bottom: 1vh;
+    right: 2vw;
 }
 
 .topBar {
@@ -207,7 +218,7 @@ table, .gridBase {
         0 55px 55.9px rgba(0, 0, 0, 0.087),
         0 119px 121px rgba(0, 0, 0, 0.11);
     border-collapse: collapse;
-    margin-top: 3vh;
+    margin-top: 5vh;
     margin-left: auto;
     margin-right: auto;
 }
@@ -285,7 +296,7 @@ td {
     background: var(--white) !important;
 }
 
-.settingsButton, .resetButton, select {
+.settingsButton, .resetButton, .mobileRunButton, select {
     outline: none;
     cursor: pointer;
     border: none;
@@ -298,7 +309,8 @@ td {
     font-family: sans-serif;
     font-size: 1rem;
     text-align: center;
-    transition: background 250ms ease-in-out,
+    transition: 
+                background 250ms ease-in-out,
                 color 250ms ease-in-out,
                 transform 150ms ease;
     -webkit-appearance: none;
@@ -313,13 +325,17 @@ td {
     display: flex;
 }
 
-.settingsButton:disabled, .resetButton:disabled, select:disabled {
+.settingsButton:disabled, 
+.resetButton:disabled, 
+.mobileRunButton:disabled, 
+select:disabled {
   background-color: #91a3a0;
   color: #666666;
 }
 
 .settingsButton:hover:enabled,
 .resetButton:hover:enabled,
+.mobileRunButton:hover:enabled, 
 select:hover:enabled,
 .settingsButton:active {
     background: var(--white);

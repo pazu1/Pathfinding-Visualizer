@@ -1,18 +1,20 @@
 import React from 'react';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
-import RangeSlider from 'react-bootstrap-range-slider';
-import MdTrash from 'react-ionicons/lib/MdTrash'
-import MdPlay from 'react-ionicons/lib/MdPlay'
-import MdFastForward from 'react-ionicons/lib/MdFastforward'
-import MdRefresh from 'react-ionicons/lib/MdRefresh'
 import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown'
 import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup'
+import MdFastForward from 'react-ionicons/lib/MdFastforward'
+import MdRefresh from 'react-ionicons/lib/MdRefresh'
+import MdPlay from 'react-ionicons/lib/MdPlay'
 
+import MobileContext from './MobileContext'
+import TopBar from './TopBar'
 import { Alg, VizState } from '../constvar'
 
 const MOBILE_WIDTH = 800
 
 class Settings extends React.Component { 
+
+    static contextType = MobileContext
 
     constructor(props) {
         super(props)
@@ -25,24 +27,22 @@ class Settings extends React.Component {
     onResize() {
         window.requestAnimationFrame(() => {
             this.setState(() => {
-                let mobile = false
                 let width = window.innerWidth
-                if (width < MOBILE_WIDTH) mobile = true
+                let mobile =  (width < MOBILE_WIDTH)
 
+                this.context.setMobile(mobile)
                 return { 
                     width: width,
-                    mobile: mobile
                 }
             })
         })
-        console.log(this.state.mobile)
     }
 
     componentWillMount() {
         this.setState({
             width: window.innerWidth,
-            mobile: window.innerWidth < MOBILE_WIDTH 
         })
+        this.context.setMobile(window.innerWidth < MOBILE_WIDTH)
     }
 
     componentDidMount() {
@@ -54,110 +54,80 @@ class Settings extends React.Component {
     }
 
     render() {
+
+        const { mobile } = this.context
+
         let runButtonText = 'Run! '
         let runButtonIcon = <MdPlay fontSize='17px' className='ionIcon'/>
-        let styleNormal = null
 
         if (this.props.visualizationState === VizState.RUNNING) { 
             runButtonText = 'Skip visualization'
-            if (this.state.mobile) {
-                styleNormal = { opacity: 0.5 }
-            }
             runButtonIcon = <MdFastForward fontSize='17px' className='ionIcon'/>
         } else if (this.props.visualizationState === VizState.FINISHED) {
-            runButtonText = 'Clear route'
+            runButtonText = 'Clear path'
             runButtonIcon = <MdRefresh fontSize='17px' className='ionIcon'/>
-        }
+        } 
 
         let dropDownIcon = <MdArrowDropup fontSize='25px' className='ionDropdown'/>
-        if (!this.state.expanded) {
+        if (!this.props.expanded) {
             dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
         }
 
         return (
             <div
-                className = { this.state.mobile ? 'topBarContainer' : null }
+                className = { mobile ? 'topBarContainer' : null }
             >
                 <button 
                     className = 'topBarToggle' 
-                    style = { !this.state.mobile ? { display: 'none' } : null }
+                    style = { !mobile ? { display: 'none' } : null }
                     onClick = {
                         () => this.setState((prevState) => {
                             return {expanded: !prevState.expanded }
                         })
                     }
                 >
-                    Main menu
+                    Options
                     { dropDownIcon }
                 </button>
 
+                <TopBar
+                    expanded={this.state.expanded}
+                    mobile={mobile}
+                    changeSelectedAlgorithm={this.props.changeSelectedAlgorithm}
+                    visualizationState={this.props.visualizationState}
+                    onClick={this.props.onClick}
+                    changeVisSpeed={this.props.changeVisSpeed}
+                    visualizationSpeed={this.props.visualizationSpeed}
+                    runButtonText={ runButtonText }
+                    runButtonIcon={ runButtonIcon }
+                    onMazeClick={this.props.onMazeClick}
+                    onResetClick={this.props.onResetClick}
+                />
                 <div 
-                    className = { this.state.mobile ? 'topBarMobile' : 'topBar' } 
-                    style = {
-                        !this.state.expanded ? { display: 'none' } : styleNormal
-                    }
+                    className='mobileAlgSelect'
+                    style={ !mobile ? { display: 'none' } : null }
                 >
-                    <div>
-                        <label>Algorithm: </label>
-                        <select 
-                            name='algorithms' 
-                            id='algorithms'
-                            onChange={this.props.changeSelectedAlgorithm}
-                            disabled={this.props.visualizationState !== VizState.INACTIVE}
-                        >
-                             <option value={Alg.ASTAR}>A*</option>
-                             <option value={Alg.BFS}>BFS</option>
-                             <option value={Alg.DFS}>DFS</option>
-                        </select>
-                    </div>
-                    <br/>
-
-                    <div className='sliderContainer'>
-                        <label>Visualization speed:</label>
-                        <RangeSlider
-                            min={10}
-                            max={100}
-                            value={this.props.visualizationSpeed}
-                            onChange={(e) => this.props.changeVisSpeed(e.target.value)}
-                        />
-                    </div>
-                    <br/>
-
-                    <button 
-                        type='button' 
-                        className='settingsButton'
-                        disabled={this.props.visualizationState === VizState.RUNNING }
-                        onClick={() => this.props.onMazeClick()}
+                    <label>Algorithm: </label>
+                    <select 
+                        name='algorithms' 
+                        id='algorithms'
+                        onChange={this.props.changeSelectedAlgorithm}
+                        disabled={this.props.visualizationState !== VizState.INACTIVE}
                     >
-                        Generate maze 
-                    </button>
-                    <br/>
-
-                    <button 
-                        type='button' 
-                        className='resetButton'
-                        disabled={this.props.visualizationState === VizState.RUNNING }
-                        onClick={() => this.props.onResetClick(true)}
-                    >
-                        <MdTrash 
-                            fontSize='17px' 
-                            className='ionIcon' 
-                            color={this.props.visualizationState === VizState.RUNNING ? '#666' : null}
-                        />
-                        Reset grid
-                    </button>
-                    <br/>
-
-                    <button 
-                        style={this.props.visualizationState !== VizState.INACTIVE ? { background: '#eee' } : null}
-                        type='button' 
-                        className='settingsButton'
-                        onClick={this.props.onClick}
-                    >
-                        {runButtonIcon}
-                        {runButtonText}
-                    </button>
+                         <option value={Alg.ASTAR}>A*</option>
+                         <option value={Alg.BFS}>BFS</option>
+                         <option value={Alg.DFS}>DFS</option>
+                    </select>
                 </div>
+                <button 
+                    className='mobileRunButton'
+                    style={ !mobile ? { display: 'none' } : null }
+                    type='button' 
+                    onClick={this.props.onClick}
+                >
+                    {runButtonIcon}
+                    {runButtonText}
+                </button>
             </div>
         )
     }

@@ -1,7 +1,9 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useContext} from 'react'
 import {useSpring, animated} from 'react-spring'
+import MobileContext from './MobileContext'
 
 const ALERTCOLOR = '#f05e54'
+const MOBILEMARGIN = 90
 
 function usePrevious(value) {
     const ref = useRef();
@@ -10,12 +12,17 @@ function usePrevious(value) {
     });
     return ref.current;
 }
+
 function Notification (props) { 
+
+    const { mobile } = useContext(MobileContext)
+    let margin = 30
+    if (mobile) margin = MOBILEMARGIN
 
     const sProps = useSpring({
         height: props.active ? 50 : 0,
         opacity: props.active ? 1 : 0,
-        bottom: props.active ? 30 : 0,
+        bottom: props.active ? margin : 0,
     })
 
     const prevWasAlert = usePrevious(props.isAlert)
@@ -26,6 +33,8 @@ function Notification (props) {
         background: props.isAlert && prevWasAlert ? ALERTCOLOR : null,
         bottom: sProps.bottom
     }
+
+    console.log(mobile)
 
     return (
         <animated.div 

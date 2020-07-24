@@ -4,9 +4,6 @@ import Popup from 'reactjs-popup'
 function ItemBarBtn(props) {
     
     let style = { display: 'table-row'}
-    if (props.parentHidden) {
-        style.display = 'none'
-    }
     if (props.disabled) {
         style.boxShadow = 'none'
         style.border = '2px solid transparent'

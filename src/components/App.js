@@ -6,6 +6,7 @@ import ItemBar from './ItemBar'
 import Notification from './Notification'
 import { Alg, CellType, CellStyles, VizState, AlertTypes, Adjacent } from '../constvar'
 import { sleep, asyncForEach, applyStyle } from '../extfunctions'
+import { MobileStateProvider } from './MobileContext'
 
 const CELLSIZE = 20
 
@@ -361,25 +362,27 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Notification
-                    active={this.state.visualizationState === VizState.FINISHED} // vis state = finished
-                    isAlert={!this.route.length}
-                    text={ 
-                        this.route.length ? 
-                        `Found path of length ${this.route.length}.`
-                        : 'Path not found!'
-                    }
-                />
-                <Settings
-                    changeSelectedAlgorithm={this.changeAlgorithm}
-                    onClick={this.onRunButtonClick}
-                    onMazeClick={this.generateMazeSimple}
-                    onResetClick={this.clearVisualization}
-                    visualizationState={this.state.visualizationState}
-                    changeVisSpeed={this.changeVisSpeed}
-                    visualizationSpeed={this.state.visualizationSpeed}
-                    activeAlert={this.state.activeAlert}
-                />
+                <MobileStateProvider>
+                    <Notification
+                        active={this.state.visualizationState === VizState.FINISHED}
+                        isAlert={!this.route.length}
+                        text={ 
+                            this.route.length ? 
+                            `Found path of length ${this.route.length}.`
+                            : 'Path not found!'
+                        }
+                    />
+                    <Settings
+                        changeSelectedAlgorithm={this.changeAlgorithm}
+                        onClick={this.onRunButtonClick}
+                        onMazeClick={this.generateMazeSimple}
+                        onResetClick={this.clearVisualization}
+                        visualizationState={this.state.visualizationState}
+                        changeVisSpeed={this.changeVisSpeed}
+                        visualizationSpeed={this.state.visualizationSpeed}
+                        activeAlert={this.state.activeAlert}
+                    />
+                </MobileStateProvider>
                 <span 
                     style = {{ 
                         width: '100%', 
