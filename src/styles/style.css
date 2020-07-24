@@ -320,6 +320,10 @@ td {
     -moz-appearance: none;
 }
 
+select {
+    max-width: 100px;
+}
+
 .resetButton {
     background: var(--accent2)
 }

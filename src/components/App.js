@@ -40,11 +40,10 @@ class App extends React.Component {
         this.generateMazeSimple = this.generateMazeSimple.bind(this)
 
         this.algFunctions = {
-            1: this.aStarPlus.bind(this),
-            2: this.BFS.bind(this),
-            3: this.DFS.bind(this),
-            4: this.GBFS.bind(this)
-
+            1: (start, end) => this.findPath(start, end, Alg.ASTAR),
+            2: (start, end) => this.findPath(start, end, Alg.BFS),
+            3: (start, end) => this.findPath(start, end, Alg.DFS),
+            4: (start, end) => this.findPath(start, end, Alg.GBFS)
         }
     }
 
@@ -109,8 +108,10 @@ class App extends React.Component {
                 start: start,
                 end: end,
                 visualizationState: VizState.RUNNING},
-                () => this.algFunctions[this.state.algorithm](this.grid[start.y][start.x],
-                    this.grid[end.y][end.x])
+                () => this.algFunctions[this.state.algorithm](
+                    this.grid[start.y][start.x],
+                    this.grid[end.y][end.x]
+                )
             )
         }
     }
@@ -210,7 +211,8 @@ class App extends React.Component {
 
     }
 
-    async aStarPlus(start, end, alg = Alg.ASTAR) { 
+    // Includes A*, BFS, DFS and Greedy BFS
+    async findPath(start, end, alg) { 
 
         // initialize
         let foundRoute = false
@@ -311,18 +313,6 @@ class App extends React.Component {
         this.updateRoute()
     }
 
-    async DFS(start, end) {
-        this.aStarPlus(start, end, Alg.DFS)
-    }
-        
-    async BFS(start, end) {
-        this.aStarPlus(start, end, Alg.BFS)
-    }
-
-    async GBFS(start, end) {
-        this.aStarPlus(start, end, Alg.GBFS)
-    }
-
     clearVisualization(resetAll = false) {
         this.route = []
 
@@ -363,61 +353,58 @@ class App extends React.Component {
             this.route.push(adjacencyList[index])
             index = adjacencyList[index].x+':'+adjacencyList[index].y
         }
-        console.log('Route length: '+this.route.length)
         this.route.shift() // remove start
         this.route.pop() // and end
     }
 
     render() {
-        return (
-            <div>
-                <MobileStateProvider>
-                    <Notification
-                        active={this.state.visualizationState === VizState.FINISHED}
-                        isAlert={!this.route.length}
-                        text={ 
-                            this.route.length ? 
-                            `Found path of length ${this.route.length}.`
-                            : 'Path not found!'
-                        }
-                    />
-                    <Settings
-                        changeSelectedAlgorithm={this.changeAlgorithm}
-                        onClick={this.onRunButtonClick}
-                        onMazeClick={this.generateMazeSimple}
-                        onResetClick={this.clearVisualization}
-                        visualizationState={this.state.visualizationState}
-                        changeVisSpeed={this.changeVisSpeed}
-                        visualizationSpeed={this.state.visualizationSpeed}
-                        activeAlert={this.state.activeAlert}
-                    />
-                </MobileStateProvider>
-                <span 
-                    style = {{ 
-                        width: '100%', 
-                        height: '100%', 
-                        display: 'flex' , 
-                        flexDirection: 'row' , 
-                        topMargin: '100', 
-                        position: 'fixed',
-                        padding: '0px 0px'
-                    }}>
-                    <ItemBar
-                        changeSelectedItem={this.changeItem}
-                        selectedItem={this.state.item}
-                        hidden={this.state.visualizationState !== VizState.INACTIVE}
-                        activeAlert={this.state.activeAlert}
-                        removeAlert={this.removeAlert}
-                    />
-                    <Grid
-                        updateCell={this.drawOnGrid}
-                        selectedItem={this.state.item}
-                        grid={this.grid}
-                        disableDrawing={this.state.visualizationState !== VizState.INACTIVE}
-                    />
-                </span>
-            </div>
-        )
+        return ( <>
+            <MobileStateProvider>
+                <Notification
+                    active={this.state.visualizationState === VizState.FINISHED}
+                    isAlert={!this.route.length}
+                    text={ 
+                        this.route.length ? 
+                        `Found path of length ${this.route.length}.`
+                        : 'Path not found!'
+                    }
+                />
+                <Settings
+                    changeSelectedAlgorithm={this.changeAlgorithm}
+                    onClick={this.onRunButtonClick}
+                    onMazeClick={this.generateMazeSimple}
+                    onResetClick={this.clearVisualization}
+                    visualizationState={this.state.visualizationState}
+                    changeVisSpeed={this.changeVisSpeed}
+                    visualizationSpeed={this.state.visualizationSpeed}
+                    activeAlert={this.state.activeAlert}
+                />
+            </MobileStateProvider>
+            <span 
+                style = {{ 
+                    width: '100%', 
+                    height: '100%', 
+                    display: 'flex' , 
+                    flexDirection: 'row' , 
+                    topMargin: '100', 
+                    position: 'fixed',
+                    padding: '0px 0px'
+                }}>
+                <ItemBar
+                    changeSelectedItem={this.changeItem}
+                    selectedItem={this.state.item}
+                    hidden={this.state.visualizationState !== VizState.INACTIVE}
+                    activeAlert={this.state.activeAlert}
+                    removeAlert={this.removeAlert}
+                />
+                <Grid
+                    updateCell={this.drawOnGrid}
+                    selectedItem={this.state.item}
+                    grid={this.grid}
+                    disableDrawing={this.state.visualizationState !== VizState.INACTIVE}
+                />
+            </span>
+        </> )
     }
 }
 

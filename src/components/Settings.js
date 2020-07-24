@@ -80,7 +80,9 @@ class Settings extends React.Component {
                     >
                         <label
                             style={{textShadow: '2px 2px 8px #000000'}}
-                        >Algorithm: </label>
+                        >
+                            Algorithm: 
+                        </label>
                         <select 
                             name='algorithms' 
                             id='algorithms'
@@ -90,6 +92,7 @@ class Settings extends React.Component {
                              <option value={Alg.ASTAR}>A*</option>
                              <option value={Alg.BFS}>BFS</option>
                              <option value={Alg.DFS}>DFS</option>
+                             <option value={Alg.GBFS}>Greedy BFS</option>
                         </select>
                     </div>
                     <button 
