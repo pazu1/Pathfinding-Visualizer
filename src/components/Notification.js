@@ -35,8 +35,6 @@ function Notification (props) {
         bottom: sProps.bottom
     }
 
-    console.log(mobile)
-
     return (
         <animated.div 
             className='notification'

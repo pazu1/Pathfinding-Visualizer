@@ -1,20 +1,34 @@
 import React from 'react'
 import RangeSlider from 'react-bootstrap-range-slider';
 import MdTrash from 'react-ionicons/lib/MdTrash'
+import { useSpring, animated, config } from 'react-spring'
 
 import { VizState, Alg } from '../constvar'
 
 function TopBar(props) {
 
+    const { mobile, hide } = props
+
+    const sProps = useSpring({
+        height: !hide ? 220 : 0,
+        opacity: !hide ? 1 : 0,
+        config: key => (key === 'height' ? config.wobbly : config.stiff)
+    })
+   
+    const aStyle = {
+        height: sProps.height,
+        opacity: sProps.opacity
+    }
+
     return (
-        <div 
-            className = { props.mobile ? 'topBarMobile' : 'topBar' } 
+        <animated.div 
+            className = { mobile ? 'topBarMobile' : 'topBar' } 
             style = {
-                props.expanded && props.mobile ? { display: 'none' } : null
+                mobile ? aStyle : null
             }
         >
             <div
-                style={ props.mobile ? { display: 'none' } : null }
+                style={ mobile ? { display: 'none' } : null }
             >
                 <label>Algorithm: </label>
                 <select 
@@ -67,7 +81,7 @@ function TopBar(props) {
             <br/>
 
             <button 
-                style={ props.mobile ? { display: 'none' } : null }
+                style={ mobile ? { display: 'none' } : null }
                 type='button' 
                 className='settingsButton'
                 onClick={props.onClick}
@@ -75,7 +89,7 @@ function TopBar(props) {
                 {props.runButtonIcon}
                 {props.runButtonText}
             </button>
-        </div>
+        </animated.div>
     )
 
 }

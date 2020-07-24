@@ -170,7 +170,10 @@ input[type=range]::-ms-thumb {
     z-index: 10;
     position: relative;
     right: 0%;
-    display: table;
+    display: flex;
+    padding: 10px;
+    overflow: hidden;
+    flex-direction: column;
     border-collapse: separate;
     border-spacing: 19px 19px;
     justify-content: space-between;
