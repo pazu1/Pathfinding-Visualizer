@@ -42,7 +42,9 @@ class App extends React.Component {
         this.algFunctions = {
             1: this.aStarPlus.bind(this),
             2: this.BFS.bind(this),
-            3: this.DFS.bind(this)
+            3: this.DFS.bind(this),
+            4: this.GBFS.bind(this)
+
         }
     }
 
@@ -258,6 +260,9 @@ class App extends React.Component {
                 }
 
                 let distance = current.distance+1  
+                if (alg === Alg.GBFS) {
+                    distance = 0
+                }
                 const multiplier = 1.0
                 let gScore = distance + multiplier*(Math.abs(end.x - x) + Math.abs(end.y - y))
 
@@ -291,7 +296,7 @@ class App extends React.Component {
                 }
             }
 
-            if (alg === Alg.ASTAR ) {
+            if (alg === Alg.ASTAR || alg === Alg.GBFS ) {
                 queue.sort(comparator)
             }
         }
@@ -312,6 +317,10 @@ class App extends React.Component {
         
     async BFS(start, end) {
         this.aStarPlus(start, end, Alg.BFS)
+    }
+
+    async GBFS(start, end) {
+        this.aStarPlus(start, end, Alg.GBFS)
     }
 
     clearVisualization(resetAll = false) {
