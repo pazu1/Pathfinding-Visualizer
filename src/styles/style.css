@@ -177,18 +177,6 @@ input[type=range]::-ms-thumb {
     background-color: var(--black);
 }
 
-.mobileAlgSelect {
-    position: fixed;
-    bottom: 1vh;
-    left: 1vw;
-}
-
-.mobileRunButton {
-    position: fixed;
-    bottom: 1vh;
-    right: 2vw;
-}
-
 .topBar {
     top: 0;
     right: 0;
@@ -200,6 +188,18 @@ input[type=range]::-ms-thumb {
     background-color: var(--black);
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+.mobileActionBar {
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    justify-content: space-around;
+    background: linear-gradient(to top, #00000099, 20%, #00000000);
 }
 
 .sliderContainer {
@@ -296,7 +296,7 @@ td {
     background: var(--white) !important;
 }
 
-.settingsButton, .resetButton, .mobileRunButton, select {
+.settingsButton, .resetButton, select {
     outline: none;
     cursor: pointer;
     border: none;
@@ -327,7 +327,6 @@ td {
 
 .settingsButton:disabled, 
 .resetButton:disabled, 
-.mobileRunButton:disabled, 
 select:disabled {
   background-color: #91a3a0;
   color: #666666;
@@ -335,7 +334,6 @@ select:disabled {
 
 .settingsButton:hover:enabled,
 .resetButton:hover:enabled,
-.mobileRunButton:hover:enabled, 
 select:hover:enabled,
 .settingsButton:active {
     background: var(--white);

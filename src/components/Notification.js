@@ -3,6 +3,7 @@ import {useSpring, animated} from 'react-spring'
 import MobileContext from './MobileContext'
 
 const ALERTCOLOR = '#f05e54'
+const DESKTOPMARGIN = 30
 const MOBILEMARGIN = 90
 
 function usePrevious(value) {
@@ -16,7 +17,7 @@ function usePrevious(value) {
 function Notification (props) { 
 
     const { mobile } = useContext(MobileContext)
-    let margin = 30
+    let margin = DESKTOPMARGIN
     if (mobile) margin = MOBILEMARGIN
 
     const sProps = useSpring({

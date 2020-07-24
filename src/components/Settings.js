@@ -103,31 +103,36 @@ class Settings extends React.Component {
                     onMazeClick={this.props.onMazeClick}
                     onResetClick={this.props.onResetClick}
                 />
-                <div 
-                    className='mobileAlgSelect'
+                <div
+                    className='mobileActionBar'
                     style={ !mobile ? { display: 'none' } : null }
                 >
-                    <label>Algorithm: </label>
-                    <select 
-                        name='algorithms' 
-                        id='algorithms'
-                        onChange={this.props.changeSelectedAlgorithm}
-                        disabled={this.props.visualizationState !== VizState.INACTIVE}
+                    <div 
                     >
-                         <option value={Alg.ASTAR}>A*</option>
-                         <option value={Alg.BFS}>BFS</option>
-                         <option value={Alg.DFS}>DFS</option>
-                    </select>
+                        <label
+                            style={{textShadow: '2px 2px 8px #000000'}}
+                        >Algorithm: </label>
+                        <select 
+                            name='algorithms' 
+                            id='algorithms'
+                            onChange={this.props.changeSelectedAlgorithm}
+                            disabled={this.props.visualizationState !== VizState.INACTIVE}
+                        >
+                             <option value={Alg.ASTAR}>A*</option>
+                             <option value={Alg.BFS}>BFS</option>
+                             <option value={Alg.DFS}>DFS</option>
+                        </select>
+                    </div>
+                    <button 
+                        className='settingsButton'
+                        style={ !mobile ? { display: 'none' } : null }
+                        type='button' 
+                        onClick={this.props.onClick}
+                    >
+                        {runButtonIcon}
+                        {runButtonText}
+                    </button>
                 </div>
-                <button 
-                    className='mobileRunButton'
-                    style={ !mobile ? { display: 'none' } : null }
-                    type='button' 
-                    onClick={this.props.onClick}
-                >
-                    {runButtonIcon}
-                    {runButtonText}
-                </button>
             </div>
         )
     }
