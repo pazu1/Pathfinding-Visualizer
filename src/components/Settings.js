@@ -10,7 +10,6 @@ import MobileContext from './MobileContext'
 import TopBar from './TopBar'
 import { Alg, VizState } from '../constvar'
 
-const MOBILE_WIDTH = 800
 
 class Settings extends React.Component { 
 
@@ -21,38 +20,8 @@ class Settings extends React.Component {
         this.state = {
             expanded: true
         }
-        this.onResize = this.onResize.bind(this)
     }
-
-    onResize() {
-        window.requestAnimationFrame(() => {
-            this.setState(() => {
-                let width = window.innerWidth
-                let mobile =  (width < MOBILE_WIDTH)
-
-                this.context.setMobile(mobile)
-                return { 
-                    width: width,
-                }
-            })
-        })
-    }
-
-    componentWillMount() {
-        this.setState({
-            width: window.innerWidth,
-        })
-        this.context.setMobile(window.innerWidth < MOBILE_WIDTH)
-    }
-
-    componentDidMount() {
-        window.addEventListener('resize', this.onResize)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.onResize)
-    }
-
+        
     render() {
 
         const { mobile } = this.context
@@ -91,7 +60,7 @@ class Settings extends React.Component {
                 </button>
 
                 <TopBar
-                    expanded={this.state.expanded}
+                    hide={!this.state.expanded}
                     mobile={mobile}
                     changeSelectedAlgorithm={this.props.changeSelectedAlgorithm}
                     visualizationState={this.props.visualizationState}
