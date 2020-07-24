@@ -38,7 +38,7 @@ class Settings extends React.Component {
         } 
 
         let dropDownIcon = <MdArrowDropup fontSize='25px' className='ionDropdown'/>
-        if (!this.props.expanded) {
+        if (!this.state.expanded) {
             dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
         }
 
