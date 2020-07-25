@@ -6,6 +6,8 @@ import MdFastForward from 'react-ionicons/lib/MdFastforward'
 import MdRefresh from 'react-ionicons/lib/MdRefresh'
 import MdPlay from 'react-ionicons/lib/MdPlay'
 
+import Modal from './Modal'
+import TabbedMenu from './TabbedMenu'
 import MobileContext from './MobileContext'
 import TopBar from './TopBar'
 import { Alg, VizState } from '../constvar'
@@ -18,7 +20,9 @@ class Settings extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            expanded: true
+            expanded: true,
+            showHelp: false
+
         }
     }
         
@@ -58,6 +62,20 @@ class Settings extends React.Component {
                     Options
                     { dropDownIcon }
                 </button>
+
+                <button
+                    onClick={() => this.setState((prevState) => {return { showHelp: !prevState.showHelp }})}
+                >
+                    Help (?)
+                </button>
+                
+                <Modal
+                    display={this.state.showHelp}
+                >
+                    <TabbedMenu
+                        titles = {['Help', 'Algorithms', 'About']}
+                    />
+                </Modal>
 
                 <TopBar
                     hide={!this.state.expanded}

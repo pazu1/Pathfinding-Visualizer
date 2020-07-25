@@ -19,14 +19,63 @@ input[type=range]::-webkit-slider-thumb {
 input[type=range].range-slider {
     padding: 0px !important;
 }
-/*
-input[type=range]::-moz-range-thumb {
-    background: var(--accent) !important;
+
+.tabButton, .tabButtonSelected {
+    outline: none;
+    cursor: pointer;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: solid;
+    border-radius: 6px 6px 0px 0px;
+    border-width: 2px;
+    border-color: var(--dark);
+    height: 45px;
+    text-decoration: none;
+    background: #d9d9d9;
+    color: var(--black);
+    font-family: sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    transition: all 150ms ease-in-out
 }
-input[type=range]::-ms-thumb {
-    background: var(--accent) !important;
+
+.tabButtonSelected {
+    border: solid;
+    border-width: 2px;
+    border-bottom: none;
+    border-color: var(--dark);
+    background: var(--white);
 }
-*/
+
+.modalBg {
+    z-index: 13;
+    position: fixed;
+    background: #00000055;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.tabbedMenuContainer {
+    margin: 18vh auto;
+    width: 30%;
+}
+
+.tabbedMenuContent {
+    background: var(--white);
+    padding: 1px;
+}
+
+.tabbedTitleBar {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    align-items: stretch;
+}
 
 .notification {
     position: fixed;
@@ -282,20 +331,20 @@ td {
 }
 */
 
-@keyframes popupFadeIn {
+@keyframes tooltopFadeIn {
   0%   {opacity: 0;}
   100% {opacity: 1;}
 }
 
-.popup-content {
+.tooltip-content {
     background: var(--white) !important;
     color: var(--black);
     opacity: 1;
-    animation-name: popupFadeIn; 
+    animation-name: tooltopFadeIn;
     animation-duration: 0.4s;
 }
 
-.popup-arrow {
+.tooltip-arrow {
     background: var(--white) !important;
 }
 
