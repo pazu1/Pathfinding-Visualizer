@@ -66,7 +66,7 @@ export const AlgorithmsPage = () => {
             <h2>Greedy Best First Search</h2>
             <p>
                 This algorithm is almost the exact same as A*, but it uses a more greedy/aggressive heuristic guess,
-                often leading it too far down the graph too fast but as a result sometimes finding a path more quickly that A* would.<br/>
+                often leading it too far down the graph too fast but as a result sometimes finding a path more quickly than A* would.<br/>
                 The tradeoff is that it is not guaranteed to find the shortest path.
 
             </p>

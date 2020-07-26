@@ -57,15 +57,16 @@ input[type=range].range-slider {
     backdrop-filter: blur(3px);
 }
 
-.tabbedMenuContainer { /* TODO: actually center this ree */
-    margin: 14vh auto;
+.tabbedMenuContainer { 
     max-width: 600px;
     width: 95vw;
     height: 60vh;
     max-height: 400px;
+    margin: 10% auto;
 }
 
 .tabbedMenuContent {
+    outline: none;
     height: 100%;
     border-top: none;
     border-width: 2px;
