@@ -90,6 +90,7 @@ function TopBar(props) {
                 {props.runButtonIcon}
                 {props.runButtonText}
             </button>
+
         </animated.div>
     )
 

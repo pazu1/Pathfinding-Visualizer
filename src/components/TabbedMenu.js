@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSpring, animated} from 'react-spring'
+import MdPlay from 'react-ionicons/lib/MdPlay'
 
 function TabbedMenu(props) {
     const normalStyle= {
@@ -11,14 +12,14 @@ function TabbedMenu(props) {
 
     const [currentIndex, setCurrentIndex] = useState(0)
     const { titles } = props
-    let tabs = titles.map( (title, index) => {
+    const tabs = titles.map( (title, index) => {
         return ( 
             <button 
-                className={ index === currentIndex ? 'tabButtonSelected' : 'tabButton' }
+                className={ index === currentIndex ? 'tabButton-selected' : 'tabButton' }
                 style={ index === currentIndex ? selectedStyle : normalStyle }
                 onClick={() => setCurrentIndex(index)}
             >
-                    {title}
+                {title}
             </button> 
         )
     }) 
@@ -31,19 +32,7 @@ function TabbedMenu(props) {
                 { tabs }
             </div>
             <div className='tabbedMenuContent'>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
-                <p>Liirum laarum</p>
+                { props.pages[currentIndex] }
             </div>
         </div> 
     )

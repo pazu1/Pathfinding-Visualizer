@@ -5,7 +5,11 @@ import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup'
 import MdFastForward from 'react-ionicons/lib/MdFastforward'
 import MdRefresh from 'react-ionicons/lib/MdRefresh'
 import MdPlay from 'react-ionicons/lib/MdPlay'
+import MdHelp from 'react-ionicons/lib/MdHelpCircle'
+import MdCode from 'react-ionicons/lib/MdCode'
+import MdInfo from 'react-ionicons/lib/MdInformationCircle'
 
+import { HelpPage, AlgorithmsPage } from './Pages'
 import Modal from './Modal'
 import TabbedMenu from './TabbedMenu'
 import MobileContext from './MobileContext'
@@ -13,7 +17,7 @@ import TopBar from './TopBar'
 import { Alg, VizState } from '../constvar'
 
 
-class Settings extends React.Component { 
+class Controls extends React.Component { 
 
     static contextType = MobileContext
 
@@ -46,7 +50,35 @@ class Settings extends React.Component {
             dropDownIcon = <MdArrowDropdown fontSize='25px' className='ionDropdown'/>
         }
 
-        return (
+        return ( <>
+
+            <Modal
+                display={this.state.showHelp}
+                onClickOutside={() => this.setState((prevState) => {
+                        return {showHelp: !prevState.showHelp}
+                })}
+            >
+                <TabbedMenu
+                    titles = {[
+                        <span><MdHelp fontSize='17px' className='ionIcon'/>{'Help'}</span>, 
+                        <span><MdCode fontSize='17px' className='ionIcon'/>{'Algorithms'}</span>, 
+                        <span><MdInfo fontSize='17px' className='ionIcon'/>{'About'}</span>, 
+                    ]}
+                    pages = {[
+                        <HelpPage/>,
+                        <AlgorithmsPage/>
+                    ]}
+                />
+            </Modal>
+            <button 
+                style={{position: 'fixed', left: 0, bottom: 0, zIndex: 12}}
+                onClick={() => this.setState((prevState) => {return { showHelp: !prevState.showHelp }})}
+                className='settingsButton'
+                type='button' 
+            >
+                About
+            </button>
+
             <div
                 className = { mobile ? 'topBarContainer' : null }
             >
@@ -63,20 +95,7 @@ class Settings extends React.Component {
                     { dropDownIcon }
                 </button>
 
-                <button
-                    onClick={() => this.setState((prevState) => {return { showHelp: !prevState.showHelp }})}
-                >
-                    Help (?)
-                </button>
                 
-                <Modal
-                    display={this.state.showHelp}
-                >
-                    <TabbedMenu
-                        titles = {['Help', 'Algorithms', 'About']}
-                    />
-                </Modal>
-
                 <TopBar
                     hide={!this.state.expanded}
                     mobile={mobile}
@@ -124,8 +143,8 @@ class Settings extends React.Component {
                     </button>
                 </div>
             </div>
-        )
+        </> )
     }
 }
 
-export default Settings
+export default Controls

@@ -4,6 +4,13 @@ import {useTransition, animated} from 'react-spring'
 
 function Modal(props) {
 
+    function handleModalClick(event) {
+        event.preventDefault()
+        if (event.target === event.currentTarget) {
+            props.onClickOutside()
+        }
+    }
+
     const { children } = props
     const transitions = useTransition(props.display, null, {
         from: { opacity: 0 },
@@ -17,6 +24,7 @@ function Modal(props) {
                 className='modalBg'
                 key={key}
                 style={props}
+                onClick={handleModalClick}
             >
                 {children}
             </animated.div>

@@ -11,7 +11,7 @@ function ItemBarBtn(props) {
 
 
     return (
-        <Popup clasName= 'tooltip' trigger={
+        <Popup className= 'tooltip' trigger={
             <button
                 className='itemBarBtn'
                 style={ style }

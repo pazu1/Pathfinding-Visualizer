@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Settings from './Settings'
+import Controls from './Controls'
 import Grid from './Grid'
 import ItemBar from './ItemBar'
 import Notification from './Notification'
@@ -369,7 +369,7 @@ class App extends React.Component {
                         : 'Path not found!'
                     }
                 />
-                <Settings
+                <Controls
                     changeSelectedAlgorithm={this.changeAlgorithm}
                     onClick={this.onRunButtonClick}
                     onMazeClick={this.generateMazeSimple}
