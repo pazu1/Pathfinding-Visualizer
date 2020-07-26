@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import LogoGithub from 'react-ionicons/lib/LogoGithub' 
 
-export const HelpPage = () => {
-    return (
+import { openWebpage } from '../extfunctions'
+
+export const Pages = [
         <div>
             <h2>How to use</h2>
             <p>
@@ -14,22 +16,9 @@ export const HelpPage = () => {
                 For more information about the algorithms used see the 'Algorithms'-tab.<br/><br/>
                 If a <span style = {{color: '#f05e54'}}>path</span> is found it will be marked on the grid with red.<br/><br/>
             </p>
-        </div>
-    )
-}
+        </div>,
 
-export const AlgorithmsPage = () => {
-    return (
         <div>
-            <h2>Introduction</h2>
-            <p>
-                This application uses a Manhattan distance heuristic, because it is a more intuitive choice for grid-based pathfinding in my opinion, as opposed to Pythagorean.
-                <br/>
-                <br/>
-                The grid is basically an unweighted graph, meaning that the weight (or distance) between two adjacent nodes is the same everywhere, for which reason the algorthms are equivalent to their unweighted versions. 
-                This is why there is no option for Dijkstra's algorthm, as it would behave the exact same as Breadth First Search in this instance.
-            </p>
-
             <h2>Algorithms</h2>
             <p>
                 There are four pathfinding algorithms to choose from 
@@ -70,6 +59,34 @@ export const AlgorithmsPage = () => {
                 The tradeoff is that it is not guaranteed to find the shortest path.
 
             </p>
+
+            <h2>About the implementation</h2>
+            <p>
+                This application uses a Manhattan distance heuristic, because it makes more sense for grid-based pathfinding in my opinion, as opposed to Pythagorean.
+                <br/>
+                <br/>
+                The grid is basically an unweighted graph, meaning that the weight (or distance) between two adjacent nodes is the same everywhere, for which reason the algorithms are equivalent to their unweighted versions. 
+                This is why there is no option for Dijkstra's algorithm, as it would behave the exact same as Breadth First Search in this instance.
+                <br/>
+                <br/>
+                Maze generation is done using a randomized version of Prim's algorithm.
+            </p>
+        </div>,
+
+        <div style={{textAlign: 'center'}}>
+            <br/>
+            <br/>
+            <br/>
+            <a 
+                href='https://github.com/pazu1/Pathfinding-Visualizer'
+                style={{color: '#000', textDecoration: 'none'}}
+            >
+                <p>
+                    View project on GitHub:
+                </p>
+                <LogoGithub fontSize='4rem'/>
+            </a>
         </div>
-    )
-}
+]
+
+export default Pages

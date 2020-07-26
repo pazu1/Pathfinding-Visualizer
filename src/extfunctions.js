@@ -15,3 +15,10 @@ export async function asyncForEach(array, callback) {
         await callback(array[index], index, array)
     }
 }
+
+export function openWebpage(url) {
+  const win = window.open(url, '_blank');
+  if (win != null) {
+    win.focus();
+  }
+}

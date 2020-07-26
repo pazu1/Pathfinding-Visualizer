@@ -9,7 +9,7 @@ import MdHelp from 'react-ionicons/lib/MdHelpCircle'
 import MdCode from 'react-ionicons/lib/MdCode'
 import MdInfo from 'react-ionicons/lib/MdInformationCircle'
 
-import { HelpPage, AlgorithmsPage } from './Pages'
+import Pages from './Pages'
 import Modal from './Modal'
 import TabbedMenu from './TabbedMenu'
 import MobileContext from './MobileContext'
@@ -54,9 +54,7 @@ class Controls extends React.Component {
 
             <Modal
                 display={this.state.showHelp}
-                onClickOutside={() => this.setState((prevState) => {
-                        return {showHelp: !prevState.showHelp}
-                })}
+                onClickOutside={() => this.setState({ showHelp: false})}
             >
                 <TabbedMenu
                     titles = {[
@@ -64,19 +62,22 @@ class Controls extends React.Component {
                         <span><MdCode fontSize='17px' className='ionIcon'/>{'Algorithms'}</span>, 
                         <span><MdInfo fontSize='17px' className='ionIcon'/>{'About'}</span>, 
                     ]}
-                    pages = {[
-                        <HelpPage/>,
-                        <AlgorithmsPage/>
-                    ]}
+                    pages = {Pages}
                 />
             </Modal>
             <button 
-                style={{position: 'fixed', left: 0, bottom: 0, zIndex: 12}}
-                onClick={() => this.setState((prevState) => {return { showHelp: !prevState.showHelp }})}
+                style={{
+                    position: 'fixed', 
+                    left: 0, 
+                    bottom: 0, 
+                    zIndex: 12,
+                    display: mobile ? 'none' : null
+                }}
+                onClick={() => this.setState({ showHelp: true})}
                 className='settingsButton'
                 type='button' 
             >
-                About
+                Help
             </button>
 
             <div
