@@ -3,6 +3,12 @@ import LogoGithub from 'react-ionicons/lib/LogoGithub'
 
 import { openWebpage } from '../extfunctions'
 
+function openTab(url) {
+    window.open(url);
+}
+
+const GITHUBURL = 'https://github.com/pazu1/Pathfinding-Visualizer'
+
 export const Pages = [
         <div>
             <h2>How to use</h2>
@@ -78,7 +84,8 @@ export const Pages = [
             <br/>
             <br/>
             <a 
-                href='https://github.com/pazu1/Pathfinding-Visualizer'
+                href={GITHUBURL}
+                onClick={() => openTab(GITHUBURL)}
                 style={{color: '#000', textDecoration: 'none'}}
             >
                 <p>

@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import { useSpring, animated} from 'react-spring'
-import MdPlay from 'react-ionicons/lib/MdPlay'
 
 function TabbedMenu(props) {
     const normalStyle= {
@@ -36,7 +34,6 @@ function TabbedMenu(props) {
             </div>
         </div> 
     )
-
 }
 
 export default TabbedMenu

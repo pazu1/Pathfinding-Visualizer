@@ -16,7 +16,6 @@ import MobileContext from './MobileContext'
 import TopBar from './TopBar'
 import { Alg, VizState } from '../constvar'
 
-
 class Controls extends React.Component { 
 
     static contextType = MobileContext
@@ -77,6 +76,7 @@ class Controls extends React.Component {
                 className='settingsButton'
                 type='button' 
             >
+                <MdHelp fontSize='17px' className='ionIcon'/>
                 Help
             </button>
 
@@ -109,7 +109,17 @@ class Controls extends React.Component {
                     runButtonIcon={ runButtonIcon }
                     onMazeClick={this.props.onMazeClick}
                     onResetClick={this.props.onResetClick}
-                />
+                >
+                    <button 
+                        style={ mobile ? null : {display: 'none'}}
+                        onClick={() => this.setState({ showHelp: true})}
+                        className='settingsButton'
+                        type='button' 
+                    >
+                        <MdHelp fontSize='17px' className='ionIcon'/>
+                        Help
+                    </button>
+                </TopBar>
                 <div
                     className='mobileActionBar'
                     style={ !mobile ? { display: 'none' } : null }

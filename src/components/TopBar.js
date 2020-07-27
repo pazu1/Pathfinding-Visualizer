@@ -7,10 +7,10 @@ import { VizState, Alg } from '../constvar'
 
 function TopBar(props) {
 
-    const { mobile, hide } = props
+    const { mobile, hide, children } = props
 
     const sProps = useSpring({
-        height: !hide ? 220 : 0,
+        height: !hide ? 280 : 0,
         opacity: !hide ? 1 : 0,
         config: key => (key === 'height' ? config.wobbly : config.stiff)
     })
@@ -90,7 +90,7 @@ function TopBar(props) {
                 {props.runButtonIcon}
                 {props.runButtonText}
             </button>
-
+            {children}
         </animated.div>
     )
 
