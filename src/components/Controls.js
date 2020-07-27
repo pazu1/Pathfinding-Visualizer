@@ -57,9 +57,15 @@ class Controls extends React.Component {
             >
                 <TabbedMenu
                     titles = {[
-                        <span><MdHelp fontSize='17px' className='ionIcon'/>{'Help'}</span>, 
-                        <span><MdCode fontSize='17px' className='ionIcon'/>{'Algorithms'}</span>, 
-                        <span><MdInfo fontSize='17px' className='ionIcon'/>{'About'}</span>, 
+                        <span className='centeredSpan'>
+                            <MdHelp fontSize='17px' className='ionIcon'/>{'Help'}
+                        </span>, 
+                        <span className='centeredSpan'>
+                            <MdCode fontSize='17px' className='ionIcon'/>{'Algorithms'}
+                        </span>, 
+                        <span className='centeredSpan'>
+                            <MdInfo fontSize='17px' className='ionIcon'/>{'About'}
+                        </span>, 
                     ]}
                     pages = {Pages}
                 />

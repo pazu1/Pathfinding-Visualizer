@@ -74,7 +74,6 @@ input[type=range].range-slider {
     outline: none;
     height: 100%;
     border-top: none;
-    border-bottom: none;
     border-width: 2px;
     border-style: solid;
     border-image:
@@ -312,6 +311,7 @@ td {
 
 .ionIcon {
     padding-right: 5px;
+    vertical-align: middle;
 }
 
 .ionDropdown {
@@ -358,6 +358,12 @@ td {
 
 .tooltip-arrow {
     background: var(--white) !important;
+}
+
+
+.centeredSpan {
+    display: flex;
+    justify-content: center;
 }
 
 .settingsButton, .resetButton, select {
