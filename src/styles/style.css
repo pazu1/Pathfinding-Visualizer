@@ -278,6 +278,7 @@ input[type=range].range-slider {
 }
 
 table, .gridBase {
+    user-select: none;
     position: relative;
     box-shadow:
         0 2.8px 2.8px rgba(0, 0, 0, 0.036),
