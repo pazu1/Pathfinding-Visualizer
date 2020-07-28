@@ -1,51 +1,46 @@
-import React from 'react'
-import RangeSlider from 'react-bootstrap-range-slider';
-import MdTrash from 'react-ionicons/lib/MdTrash'
-import { useSpring, animated, config } from 'react-spring'
+import React from "react";
+import RangeSlider from "react-bootstrap-range-slider";
+import MdTrash from "react-ionicons/lib/MdTrash";
+import { useSpring, animated, config } from "react-spring";
 
-import { VizState, Alg } from '../constvar'
+import { VizState, Alg } from "../constvar";
 
 function TopBar(props) {
-
-    const { mobile, hide, children } = props
+    const { mobile, hide, children } = props;
 
     const sProps = useSpring({
         height: !hide ? 280 : 0,
         opacity: !hide ? 1 : 0,
-        config: key => (key === 'height' ? config.wobbly : config.stiff)
-    })
-   
+        config: (key) => (key === "height" ? config.wobbly : config.stiff),
+    });
+
     const aStyle = {
         height: sProps.height,
-        opacity: sProps.opacity
-    }
+        opacity: sProps.opacity,
+    };
 
     return (
-        <animated.div 
-            className = { mobile ? 'topBarMobile' : 'topBar' } 
-            style = {
-                mobile ? aStyle : null
-            }
+        <animated.div
+            className={mobile ? "topBarMobile" : "topBar"}
+            style={mobile ? aStyle : null}
         >
-            <div
-                style={ mobile ? { display: 'none' } : null }
-            >
+            <div style={mobile ? { display: "none" } : null}>
                 <label>Algorithm: </label>
-                <select 
-                    name='algorithms' 
-                    id='algorithms'
+                <select
+                    name="algorithms"
+                    id="algorithms"
                     onChange={props.changeSelectedAlgorithm}
                     disabled={props.visualizationState !== VizState.INACTIVE}
                 >
-                     <option value={Alg.ASTAR}>A*</option>
-                     <option value={Alg.BFS}>BFS</option>
-                     <option value={Alg.DFS}>DFS</option>
-                     <option value={Alg.GBFS}>Greedy BFS</option>
+                    <option value={Alg.ASTAR}>A*</option>
+                    <option value={Alg.BFS}>BFS</option>
+                    <option value={Alg.DFS}>DFS</option>
+                    <option value={Alg.GBFS}>Greedy BFS</option>
                 </select>
             </div>
-            <br/>
+            <br />
 
-            <div className='sliderContainer'>
+            <div className="sliderContainer">
                 <label>Visualization speed:</label>
                 <RangeSlider
                     min={10}
@@ -54,37 +49,41 @@ function TopBar(props) {
                     onChange={(e) => props.changeVisSpeed(e.target.value)}
                 />
             </div>
-            <br/>
+            <br />
 
-            <button 
-                type='button' 
-                className='settingsButton'
-                disabled={props.visualizationState === VizState.RUNNING }
+            <button
+                type="button"
+                className="settingsButton"
+                disabled={props.visualizationState === VizState.RUNNING}
                 onClick={() => props.onMazeClick()}
             >
-                Generate maze 
+                Generate maze
             </button>
-            <br/>
+            <br />
 
-            <button 
-                type='button' 
-                className='resetButton'
-                disabled={props.visualizationState === VizState.RUNNING }
+            <button
+                type="button"
+                className="resetButton"
+                disabled={props.visualizationState === VizState.RUNNING}
                 onClick={() => props.onResetClick(true)}
             >
-                <MdTrash 
-                    fontSize='17px' 
-                    className='ionIcon' 
-                    color={props.visualizationState === VizState.RUNNING ? '#666' : null}
+                <MdTrash
+                    fontSize="17px"
+                    className="ionIcon"
+                    color={
+                        props.visualizationState === VizState.RUNNING
+                            ? "#666"
+                            : null
+                    }
                 />
                 Reset grid
             </button>
-            <br/>
+            <br />
 
-            <button 
-                style={ mobile ? { display: 'none' } : null }
-                type='button' 
-                className='settingsButton'
+            <button
+                style={mobile ? { display: "none" } : null}
+                type="button"
+                className="settingsButton"
                 onClick={props.onClick}
             >
                 {props.runButtonIcon}
@@ -92,8 +91,7 @@ function TopBar(props) {
             </button>
             {children}
         </animated.div>
-    )
-
+    );
 }
 
-export default TopBar
+export default TopBar;

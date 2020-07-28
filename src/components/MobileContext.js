@@ -1,71 +1,68 @@
-import React from 'react'
+import React from "react";
 
-const MobileContext = React.createContext()
+const MobileContext = React.createContext();
 
-const MOBILE_WIDTH = 800
+const MOBILE_WIDTH = 800;
 
 class MobileStateProvider extends React.Component {
-
     constructor(props) {
-        super()
+        super();
         this.state = {
-            mobile: false
-        }
-        this.onResize = this.onResize.bind(this)
+            mobile: false,
+        };
+        this.onResize = this.onResize.bind(this);
     }
 
     onResize() {
         window.requestAnimationFrame(() => {
             this.setState(() => {
-                let width = window.innerWidth
-                let mobile =  (width < MOBILE_WIDTH)
+                let width = window.innerWidth;
+                let mobile = width < MOBILE_WIDTH;
 
-                return { 
+                return {
                     width: width,
-                    mobile: mobile
-                }
-            })
-        })
+                    mobile: mobile,
+                };
+            });
+        });
     }
 
-    componentWillMount() {
+    componentWillMount() {
         this.setState({
             width: window.innerWidth,
-            mobile: window.innerWidth < MOBILE_WIDTH
-        })
+            mobile: window.innerWidth < MOBILE_WIDTH,
+        });
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this.onResize)
+        window.addEventListener("resize", this.onResize);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.onResize)
+        window.removeEventListener("resize", this.onResize);
     }
-    
 
     setMobile = (newMobile) => {
-        this.setState({ mobile: newMobile })
-    }
+        this.setState({ mobile: newMobile });
+    };
 
-    render() {
-        const { mobile } = this.state
-        const { setMobile } = this
+    render() {
+        const { mobile } = this.state;
+        const { setMobile } = this;
 
-        return ( 
-            <MobileContext.Provider 
+        return (
+            <MobileContext.Provider
                 value={{
                     mobile,
-                    setMobile
+                    setMobile,
                 }}
             >
                 {this.props.children}
             </MobileContext.Provider>
-        )
+        );
     }
 }
 
-export default MobileContext
+export default MobileContext;
 
-export { MobileStateProvider }
-    
+export { MobileStateProvider };

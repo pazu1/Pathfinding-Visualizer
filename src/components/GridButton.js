@@ -1,38 +1,36 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from "react";
 
-function GridButton (props) { 
-
-    const [, setState] = useState()
+function GridButton(props) {
+    const [, setState] = useState();
 
     const updateAnyway = () => {
-        setState({})
-    }
+        setState({});
+    };
 
-    const compRef = useRef()
-    props.cell.ref = compRef
+    const compRef = useRef();
+    props.cell.ref = compRef;
 
-    return(
-        <button 
+    return (
+        <button
             ref={compRef}
-            type='button' 
-            className='gridButton'
-
-            onMouseDown = {() => {
+            type="button"
+            className="gridButton"
+            onMouseDown={() => {
                 if (!props.disableDrawing) {
-                    props.clickFunction(props.x, props.y)
-                    updateAnyway()
+                    props.clickFunction(props.x, props.y);
+                    updateAnyway();
                 }
-                
             }}
-            onMouseOver = {() => {
+            onMouseOver={() => {
                 if (props.drawing && !props.disableDrawing) {
-                    props.clickFunction(props.x, props.y)
-                    updateAnyway()
+                    props.clickFunction(props.x, props.y);
+                    updateAnyway();
                 }
             }}
-        >‎
+        >
+            ‎
         </button>
-    )
+    );
 }
 
-export default GridButton
+export default GridButton;
