@@ -32,10 +32,10 @@ Made using:
 
 Other dependencies:
 
-<a href="https://github.com/react-spring/react-spring/">React Spring</a>
+- <a href="https://github.com/react-spring/react-spring/">React Spring</a>
 
-<a href="https://github.com/jaywilz/react-bootstrap-range-slider/">React Bootstrap Range Slider</a>
+- <a href="https://github.com/jaywilz/react-bootstrap-range-slider/">React Bootstrap Range Slider</a>
 
-<a href="https://github.com/zamarrowski/react-ionicons/">react-ionicons</a>
+- <a href="https://github.com/zamarrowski/react-ionicons/">react-ionicons</a>
 
-<a href="https://github.com/yjose/reactjs-popup/">Reactjs-popup</a>
+- <a href="https://github.com/yjose/reactjs-popup/">Reactjs-popup</a>
