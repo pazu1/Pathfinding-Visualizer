@@ -26,7 +26,7 @@ $ npm install
 
 Made using:
 
-| React | NodeJS |
+| React | Node.js |
 | :-: | :-: |
 | <img src="favicon.ico" width="30"> | <img src="nodejsicon.svg" width="30"> |
 
