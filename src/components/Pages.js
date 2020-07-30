@@ -27,7 +27,7 @@ export const Pages = [
             <span style={{ color: "#36bf00" }}>start</span> and{" "}
             <span style={{ color: "#a200ff" }}>end</span>. <br />
             <br />
-            <span style={{ color: "#38ffc7" }}>Visited</span> nodes nodes are
+            <span style={{ color: "#29ba91" }}>Visited</span> nodes nodes are
             marked in cyan. They are parts of the grid that the algorithm had to
             take into account in order to find the final path.
             <br />
