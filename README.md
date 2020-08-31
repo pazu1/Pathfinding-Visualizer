@@ -30,7 +30,7 @@ Made using:
 | :-: |
 | <img src="favicon.ico" width="30"> |
 
-Other dependencies:
+Components/modules:
 
 - <a href="https://github.com/react-spring/react-spring/">React Spring</a>
 
