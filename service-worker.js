@@ -11,16 +11,18 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
-
 importScripts(
-  "/Pathfinding-Visualizer/precache-manifest.02ad21ec357ca25e2c3cb564857c9d57.js"
+    "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js"
 );
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+importScripts(
+    "/Pathfinding-Visualizer/precache-manifest.991830fc290d60ee3a488e3757142c5a.js"
+);
+
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        self.skipWaiting();
+    }
 });
 
 workbox.core.clientsClaim();
@@ -33,7 +35,9 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/Pathfinding-Visualizer/index.html"), {
-  
-  blacklist: [/^\/_/,/\/[^/?]+\.[^/]+$/],
-});
+workbox.routing.registerNavigationRoute(
+    workbox.precaching.getCacheKeyForURL("/Pathfinding-Visualizer/index.html"),
+    {
+        blacklist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+    }
+);
