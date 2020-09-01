@@ -278,7 +278,7 @@ class App extends React.Component {
                 if (alg === Alg.GBFS) {
                     distance = 0;
                 }
-                const multiplier = 1.0;
+                const multiplier = 1.0 + 1e-10;
                 let gScore =
                     distance +
                     multiplier * (Math.abs(end.x - x) + Math.abs(end.y - y));
