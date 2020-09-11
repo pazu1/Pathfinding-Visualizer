@@ -4,13 +4,13 @@ Web-application for visualizing pathfinding algorithms.
 
 ## Usage
 
-Should work on most Chromium based browsers.
+Should work on Chromium and Firefox.
 
 Live demo: https://pazu1.github.io/Pathfinding-Visualizer/
 
 ## Install
 
-To install the project locally clone the repo 
+To install the project locally clone the repository
 
 ```sh
 $ git clone https://github.com/pazu1/Pathfinding-Visualizer.git
